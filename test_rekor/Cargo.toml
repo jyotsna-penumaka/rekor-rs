@@ -1,0 +1,11 @@
+[package]
+name = "test_rekor"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+openapi = { path = "../rekor-rs" }
+serde_json = "1.0.79"
+tokio = { version = "1.14.0", features = ["full"] }
