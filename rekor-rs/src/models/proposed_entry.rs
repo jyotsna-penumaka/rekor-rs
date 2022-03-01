@@ -9,7 +9,8 @@
  */
 
 
-
+ use crate::models::rekord::Spec;
+ 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "kind")]
 pub enum ProposedEntry {
@@ -18,63 +19,63 @@ pub enum ProposedEntry {
         #[serde(rename = "apiVersion")]
         api_version: String,
         #[serde(rename = "spec")]
-        spec: serde_json::Value,
+        spec: Spec,
     },
     #[serde(rename="hashedrekord")]
     Hashedrekord {
         #[serde(rename = "apiVersion")]
         api_version: String,
         #[serde(rename = "spec")]
-        spec: serde_json::Value,
+        spec: Spec,
     },
     #[serde(rename="helm")]
     Helm {
         #[serde(rename = "apiVersion")]
         api_version: String,
         #[serde(rename = "spec")]
-        spec: serde_json::Value,
+        spec: Spec,
     },
     #[serde(rename="intoto")]
     Intoto {
         #[serde(rename = "apiVersion")]
         api_version: String,
         #[serde(rename = "spec")]
-        spec: serde_json::Value,
+        spec: Spec,
     },
     #[serde(rename="jar")]
     Jar {
         #[serde(rename = "apiVersion")]
         api_version: String,
         #[serde(rename = "spec")]
-        spec: serde_json::Value,
+        spec: Spec,
     },
     #[serde(rename="rekord")]
     Rekord {
         #[serde(rename = "apiVersion")]
         api_version: String,
         #[serde(rename = "spec")]
-        spec: serde_json::Value,
+        spec: Spec,
     },
     #[serde(rename="rfc3161")]
     Rfc3161 {
         #[serde(rename = "apiVersion")]
         api_version: String,
         #[serde(rename = "spec")]
-        spec: serde_json::Value,
+        spec: Spec,
     },
     #[serde(rename="rpm")]
     Rpm {
         #[serde(rename = "apiVersion")]
         api_version: String,
         #[serde(rename = "spec")]
-        spec: serde_json::Value,
+        spec: Spec,
     },
     #[serde(rename="tuf")]
     Tuf {
         #[serde(rename = "apiVersion")]
         api_version: String,
         #[serde(rename = "spec")]
-        spec: serde_json::Value,
+        spec: Spec,
     },
 }
 

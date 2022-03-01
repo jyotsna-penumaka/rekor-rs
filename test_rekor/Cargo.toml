@@ -9,3 +9,4 @@ edition = "2021"
 openapi = { path = "../rekor-rs" }
 serde_json = "1.0.79"
 tokio = { version = "1.14.0", features = ["full"] }
+url = "2.2.2"
