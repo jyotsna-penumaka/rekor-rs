@@ -1,5 +1,5 @@
 use openapi::apis::{configuration::Configuration, entries_api};
-use openapi::models::{ProposedEntry};
+use openapi::models::{ProposedEntry, log_entry::LogEntry};
 use openapi::models::rekord::{Hash, Data, PublicKey, Signature, Spec};
 use url::Url;
 
@@ -7,9 +7,11 @@ use url::Url;
 async fn main() {
     let configuration = Configuration::default();
 
+    // Test create_log_entry 
+    println!("Test#1 create_log_entry!");
     let hash = Hash::new(
         "sha256".to_string(),
-        "8b811ce3a8de7c778f64bdeabd0a30d9b3712c3d65d4324937471b1dfe6fc2a5".to_string(),
+        "0defde9b5c64102ed157d35ca0bdaf3208846484f759c75799f03f55f973fd5b".to_string(),
     );
     let data = Data::new(
         hash,
@@ -20,7 +22,7 @@ async fn main() {
     );
     let signature = Signature::new(
         "ssh".to_string(),
-        "LS0tLS1CRUdJTiBTU0ggU0lHTkFUVVJFLS0tLS0KVTFOSVUwbEhBQUFBQVFBQUFETUFBQUFMYzNOb0xXVmtNalUxTVRrQUFBQWcvdmVTYzRvbHBLdE1vT1I3cndmOFZHSHpoaApnMEZJb0R0YzVSMkpsdHpHZ0FBQUFFWm1sc1pRQUFBQUFBQUFBR2MyaGhOVEV5QUFBQVV3QUFBQXR6YzJndFpXUXlOVFV4Ck9RQUFBRUNnVi8wbnZCTlQyRjZxUzJuWXpST1JmeVFWK1U2dzF1SmRSYUlpcHFGKzJuRGJKMkdvSWVGT1Mrakl5dlc0SVAKTEJkVUZ6cVhZcnZmaTJjeTM4aWFvSgotLS0tLUVORCBTU0ggU0lHTkFUVVJFLS0tLS0K".to_string(),
+        "LS0tLS1CRUdJTiBTU0ggU0lHTkFUVVJFLS0tLS0KVTFOSVUwbEhBQUFBQVFBQUFETUFBQUFMYzNOb0xXVmtNalUxTVRrQUFBQWcvdmVTYzRvbHBLdE1vT1I3cndmOFZHSHpoaApnMEZJb0R0YzVSMkpsdHpHZ0FBQUFFWm1sc1pRQUFBQUFBQUFBR2MyaGhOVEV5QUFBQVV3QUFBQXR6YzJndFpXUXlOVFV4Ck9RQUFBRUNNaXJBNmNUMVUzRTUrM0pkWURhdTFVWG1ZcWRzMUxPMVppN04vYVh2a2puWW4yYmlFUzBYUTJ4R3FNOGFXQUYKUU4zTWcxYmxPL3B4UzQzcURER3pBUAotLS0tLUVORCBTU0ggU0lHTkFUVVJFLS0tLS0K".to_string(),
         public_key,
     );
     let spec = Spec::new(signature, data);
@@ -31,6 +33,20 @@ async fn main() {
             spec: spec,
         };
         
-    let message = entries_api::create_log_entry(&configuration, proposed_entry).await;
+
+/*     let uuid: &str = &response[1..67];
+    let rest: &str = &response[69..response.len() - 2];
+    let sum = "{\"uuid\": ".to_string() + &(uuid.to_owned()) + "," + rest;
+    let v: Result<LogEntry, serde_json::Error> = serde_json::from_str(&sum);
+    v.map_err(|err| Box::new(err) as Box<dyn std::error::Error>) */
+
+    let message: LogEntry = entries_api::create_log_entry(&configuration, proposed_entry).await.unwrap();
     println!("{:#?}", message);
+
+    // Test get_log_entry_by_index 
+/*     println!("Test#2 get_log_entry_by_index");
+    let message = entries_api::get_log_entry_by_index(&configuration, 1).await;
+    println!("{:#?}", message); */
+
+
 }
