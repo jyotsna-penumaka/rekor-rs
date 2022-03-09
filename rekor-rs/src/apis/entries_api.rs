@@ -13,7 +13,7 @@ use reqwest;
 
 use crate::apis::ResponseContent;
 use super::{Error, configuration};
-
+use crate::models::log_entry::LogEntry;
 
 /// struct for typed errors of method [`create_log_entry`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -54,7 +54,7 @@ pub enum SearchLogQueryError {
 
 
 /// Creates an entry in the transparency log for a detached signature, public key, and content. Items can be included in the request or fetched by the server when URLs are specified. 
-pub async fn create_log_entry(configuration: &configuration::Configuration, proposed_entry: crate::models::ProposedEntry) -> Result<::std::collections::HashMap<String, serde_json::Value>, Error<CreateLogEntryError>> {
+pub async fn create_log_entry(configuration: &configuration::Configuration, proposed_entry: crate::models::ProposedEntry) -> Result<LogEntry, Error<CreateLogEntryError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -74,7 +74,10 @@ pub async fn create_log_entry(configuration: &configuration::Configuration, prop
     let local_var_content = local_var_resp.text().await?;
 
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
-        serde_json::from_str(&local_var_content).map_err(Error::from)
+        let uuid: &str = &local_var_content[1..67];
+        let rest: &str = &local_var_content[69..local_var_content.len() - 2];
+        let sum = "{\"uuid\": ".to_string() + &(uuid.to_owned()) + "," + rest;
+        serde_json::from_str::<LogEntry>(&sum).map_err(Error::from)
     } else {
         let local_var_entity: Option<CreateLogEntryError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
@@ -82,7 +85,7 @@ pub async fn create_log_entry(configuration: &configuration::Configuration, prop
     }
 }
 
-pub async fn get_log_entry_by_index(configuration: &configuration::Configuration, log_index: i32) -> Result<::std::collections::HashMap<String, serde_json::Value>, Error<GetLogEntryByIndexError>> {
+pub async fn get_log_entry_by_index(configuration: &configuration::Configuration, log_index: i32) -> Result<LogEntry, Error<GetLogEntryByIndexError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -102,7 +105,10 @@ pub async fn get_log_entry_by_index(configuration: &configuration::Configuration
     let local_var_content = local_var_resp.text().await?;
 
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
-        serde_json::from_str(&local_var_content).map_err(Error::from)
+        let uuid: &str = &local_var_content[1..67];
+        let rest: &str = &local_var_content[69..local_var_content.len() - 2];
+        let sum = "{\"uuid\": ".to_string() + &(uuid.to_owned()) + "," + rest;
+        serde_json::from_str::<LogEntry>(&sum).map_err(Error::from)
     } else {
         let local_var_entity: Option<GetLogEntryByIndexError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
@@ -111,7 +117,7 @@ pub async fn get_log_entry_by_index(configuration: &configuration::Configuration
 }
 
 /// Returns the entry, root hash, tree size, and a list of hashes that can be used to calculate proof of an entry being included in the transparency log
-pub async fn get_log_entry_by_uuid(configuration: &configuration::Configuration, entry_uuid: &str) -> Result<::std::collections::HashMap<String, serde_json::Value>, Error<GetLogEntryByUuidError>> {
+pub async fn get_log_entry_by_uuid(configuration: &configuration::Configuration, entry_uuid: &str) -> Result<LogEntry, Error<GetLogEntryByUuidError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -130,7 +136,10 @@ pub async fn get_log_entry_by_uuid(configuration: &configuration::Configuration,
     let local_var_content = local_var_resp.text().await?;
 
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
-        serde_json::from_str(&local_var_content).map_err(Error::from)
+        let uuid: &str = &local_var_content[1..67];
+        let rest: &str = &local_var_content[69..local_var_content.len() - 2];
+        let sum = "{\"uuid\": ".to_string() + &(uuid.to_owned()) + "," + rest;
+        serde_json::from_str::<LogEntry>(&sum).map_err(Error::from)
     } else {
         let local_var_entity: Option<GetLogEntryByUuidError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
@@ -138,7 +147,7 @@ pub async fn get_log_entry_by_uuid(configuration: &configuration::Configuration,
     }
 }
 
-pub async fn search_log_query(configuration: &configuration::Configuration, entry: crate::models::SearchLogQuery) -> Result<::std::collections::HashMap<String, serde_json::Value>, Error<SearchLogQueryError>> {
+pub async fn search_log_query(configuration: &configuration::Configuration, entry: crate::models::SearchLogQuery) -> Result<Vec<LogEntry>, Error<SearchLogQueryError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -156,9 +165,13 @@ pub async fn search_log_query(configuration: &configuration::Configuration, entr
 
     let local_var_status = local_var_resp.status();
     let local_var_content = local_var_resp.text().await?;
-
+    println!("{}", local_var_content);
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
-        serde_json::from_str(&local_var_content).map_err(Error::from)
+        let uuid: &str = &local_var_content[1..67];
+        let rest: &str = &local_var_content[69..local_var_content.len() - 2];
+        let sum = "{\"uuid\": ".to_string() + &(uuid.to_owned()) + "," + rest;
+        serde_json::from_str::<Vec<LogEntry>>(&sum).map_err(Error::from)
+        //serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
         let local_var_entity: Option<SearchLogQueryError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
