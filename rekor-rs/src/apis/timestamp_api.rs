@@ -53,9 +53,8 @@ pub async fn get_timestamp_cert_chain(configuration: &configuration::Configurati
 
     let local_var_status = local_var_resp.status();
     let local_var_content = local_var_resp.text().await?;
-
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
-        serde_json::from_str(&local_var_content).map_err(Error::from)
+        Ok(local_var_content)
     } else {
         let local_var_entity: Option<GetTimestampCertChainError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };

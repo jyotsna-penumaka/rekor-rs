@@ -14,6 +14,7 @@ use reqwest;
 use crate::apis::ResponseContent;
 use super::{Error, configuration};
 use crate::models::log_entry::LogEntry;
+use serde_json::{Deserializer, Value}; 
 
 /// struct for typed errors of method [`create_log_entry`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -52,6 +53,11 @@ pub enum SearchLogQueryError {
     UnknownValue(serde_json::Value),
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct LogEntries {
+    entries: Vec<LogEntry>
+}
 
 /// Creates an entry in the transparency log for a detached signature, public key, and content. Items can be included in the request or fetched by the server when URLs are specified. 
 pub async fn create_log_entry(configuration: &configuration::Configuration, proposed_entry: crate::models::ProposedEntry) -> Result<LogEntry, Error<CreateLogEntryError>> {
@@ -147,7 +153,7 @@ pub async fn get_log_entry_by_uuid(configuration: &configuration::Configuration,
     }
 }
 
-pub async fn search_log_query(configuration: &configuration::Configuration, entry: crate::models::SearchLogQuery) -> Result<Vec<LogEntry>, Error<SearchLogQueryError>> {
+pub async fn search_log_query(configuration: &configuration::Configuration, entry: crate::models::SearchLogQuery) -> Result<LogEntries, Error<SearchLogQueryError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -165,12 +171,22 @@ pub async fn search_log_query(configuration: &configuration::Configuration, entr
 
     let local_var_status = local_var_resp.status();
     let local_var_content = local_var_resp.text().await?;
-    println!("{}", local_var_content);
+    println!("{:#?}", local_var_content);
+
+
+    let stream = Deserializer::from_str(&local_var_content).into_iter::<Value>();
+
+    println!("Printing the values: ");
+    for value in stream {
+        println!("hello");
+        println!("{}", value.unwrap());
+    }
+
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         let uuid: &str = &local_var_content[1..67];
         let rest: &str = &local_var_content[69..local_var_content.len() - 2];
         let sum = "{\"uuid\": ".to_string() + &(uuid.to_owned()) + "," + rest;
-        serde_json::from_str::<Vec<LogEntry>>(&sum).map_err(Error::from)
+        serde_json::from_str::<LogEntries>(&sum).map_err(Error::from)
         //serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
         let local_var_entity: Option<SearchLogQueryError> = serde_json::from_str(&local_var_content).ok();
@@ -178,4 +194,5 @@ pub async fn search_log_query(configuration: &configuration::Configuration, entr
         Err(Error::ResponseError(local_var_error))
     }
 }
+
 

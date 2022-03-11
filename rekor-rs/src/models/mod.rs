@@ -45,7 +45,7 @@ pub use self::rpm_all_of::RpmAllOf;
 pub mod search_index;
 pub use self::search_index::SearchIndex;
 pub mod search_index_public_key;
-pub use self::search_index_public_key::SearchIndexPublicKey;
+//pub use self::search_index_public_key;
 pub mod search_log_query;
 pub use self::search_log_query::SearchLogQuery;
 pub mod tuf;
