@@ -153,7 +153,7 @@ pub async fn get_log_entry_by_uuid(configuration: &configuration::Configuration,
     }
 }
 
-pub async fn search_log_query(configuration: &configuration::Configuration, entry: crate::models::SearchLogQuery) -> Result<LogEntries, Error<SearchLogQueryError>> {
+pub async fn search_log_query(configuration: &configuration::Configuration, entry: crate::models::SearchLogQuery) -> Result<std::string::String, Error<SearchLogQueryError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -171,23 +171,9 @@ pub async fn search_log_query(configuration: &configuration::Configuration, entr
 
     let local_var_status = local_var_resp.status();
     let local_var_content = local_var_resp.text().await?;
-    println!("{:#?}", local_var_content);
-
-
-    let stream = Deserializer::from_str(&local_var_content).into_iter::<Value>();
-
-    println!("Printing the values: ");
-    for value in stream {
-        println!("hello");
-        println!("{}", value.unwrap());
-    }
 
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
-        let uuid: &str = &local_var_content[1..67];
-        let rest: &str = &local_var_content[69..local_var_content.len() - 2];
-        let sum = "{\"uuid\": ".to_string() + &(uuid.to_owned()) + "," + rest;
-        serde_json::from_str::<LogEntries>(&sum).map_err(Error::from)
-        //serde_json::from_str(&local_var_content).map_err(Error::from)
+        Ok(local_var_content)
     } else {
         let local_var_entity: Option<SearchLogQueryError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
