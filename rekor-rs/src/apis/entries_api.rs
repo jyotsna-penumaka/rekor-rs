@@ -14,7 +14,6 @@ use reqwest;
 use crate::apis::ResponseContent;
 use super::{Error, configuration};
 use crate::models::log_entry::LogEntry;
-use serde_json::{Deserializer, Value}; 
 
 /// struct for typed errors of method [`create_log_entry`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -78,7 +77,7 @@ pub async fn create_log_entry(configuration: &configuration::Configuration, prop
 
     let local_var_status = local_var_resp.status();
     let local_var_content = local_var_resp.text().await?;
-
+    
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         let uuid: &str = &local_var_content[1..67];
         let rest: &str = &local_var_content[69..local_var_content.len() - 2];

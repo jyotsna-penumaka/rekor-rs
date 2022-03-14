@@ -2,6 +2,7 @@ use openapi::apis::{configuration::Configuration, entries_api, index_api, pubkey
 use openapi::models::{ProposedEntry, log_entry::LogEntry, SearchLogQuery, SearchIndex, search_index_public_key, LogInfo, ConsistencyProof};
 use openapi::models::rekord::{Hash, Data, PublicKey, Signature, Spec};
 use url::Url;
+use std::path::PathBuf;
 
 #[tokio::main]
 async fn main() {
@@ -66,7 +67,6 @@ async fn main() {
         entries: Some(vec![proposed_entry_2]),
     };
     let message = entries_api::search_log_query(&configuration, query).await.unwrap();
-    message.lol();
     println!("{}", message); 
 
     // Test#5 search_index
@@ -95,8 +95,8 @@ async fn main() {
     let pubkey = pubkey_api::get_public_key(&configuration).await;
     println!("{:#?}", pubkey);
 
-    // Test#7 get_public_key
-    // This function returns the public key as in a RekorVersion struct.
+    // Test#7 get_rekor_version
+    // This function returns the rekor version as in a RekorVersion struct.
     println!("____________________________________________________________________________");
     println!("____________________________________________________________________________");
     println!("Test#7 get_rekor_version");
@@ -111,7 +111,13 @@ async fn main() {
     let cert_chain = timestamp_api::get_timestamp_cert_chain(&configuration).await;
     println!("{}", cert_chain.unwrap());
 
-    // Test#9 : 
+    // Test#9 : get_timestamp_response needs a parameter request (std::path::PathBuf), not sure what goes into this function	
+    println!("____________________________________________________________________________");
+    println!("____________________________________________________________________________");
+    println!("Test#9 : get_timestamp_response");
+    let request_path = PathBuf::from(r"/home/jpenumak/Downloads/test_request.tsq");
+    let response_path = timestamp_api::get_timestamp_response(&configuration, request_path).await.unwrap();
+    println!("{:#?}", response_path);
 
     // Test#10 get_log_info
     println!("____________________________________________________________________________");
@@ -124,7 +130,6 @@ async fn main() {
     println!("____________________________________________________________________________");
     println!("____________________________________________________________________________");
     println!("Test#11 get_log_proof");
-    let log_proof : ConsistencyProof = tlog_api::get_log_proof(&configuration, 1632171, None).await.unwrap();
+    let log_proof : ConsistencyProof = tlog_api::get_log_proof(&configuration, 10, None).await.unwrap();
     println!("{:#?}", log_proof);
-
 }

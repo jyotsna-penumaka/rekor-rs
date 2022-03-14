@@ -13,7 +13,6 @@ use reqwest;
 
 use crate::apis::ResponseContent;
 use super::{Error, configuration};
-use serde_json::{Deserializer, Value};
 
 /// struct for typed errors of method [`search_index`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
