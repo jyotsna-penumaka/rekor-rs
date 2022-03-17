@@ -34,7 +34,7 @@ async fn main() {
     
     let proposed_entry_2 = proposed_entry.clone();
 
-/*     // Test#1 create_log_entry 
+/* /*     // Test#1 create_log_entry 
     println!("____________________________________________________________________________");
     println!("____________________________________________________________________________");
     println!("Test#1 create_log_entry!");
@@ -111,14 +111,6 @@ async fn main() {
     let cert_chain = timestamp_api::get_timestamp_cert_chain(&configuration).await;
     println!("{}", cert_chain.unwrap());
 
-    // Test#9 : get_timestamp_response needs a parameter request (std::path::PathBuf), not sure what goes into this function	
-    println!("____________________________________________________________________________");
-    println!("____________________________________________________________________________");
-    println!("Test#9 : get_timestamp_response");
-    let request_path = PathBuf::from(r"/home/jpenumak/Downloads/test_request.tsq");
-    let response_path = timestamp_api::get_timestamp_response(&configuration, request_path).await.unwrap();
-    println!("{:#?}", response_path);
-
     // Test#10 get_log_info
     println!("____________________________________________________________________________");
     println!("____________________________________________________________________________");
@@ -131,5 +123,22 @@ async fn main() {
     println!("____________________________________________________________________________");
     println!("Test#11 get_log_proof");
     let log_proof : ConsistencyProof = tlog_api::get_log_proof(&configuration, 10, None).await.unwrap();
-    println!("{:#?}", log_proof);
+    println!("{:#?}", log_proof); */
+
+    // Test#9 : get_timestamp_response needs a parameter request (std::path::PathBuf), not sure what goes into this function	
+    println!("____________________________________________________________________________");
+    println!("____________________________________________________________________________");
+    println!("Test#9 : get_timestamp_response");
+    let request_path = PathBuf::from(r"test_request.tsq");
+    let response_path = timestamp_api::get_timestamp_response(&configuration, request_path).await.unwrap();
+    println!("{:#?}", response_path);
+    
 }
+
+/* curl -H "Content-Type: application/timestamp-query" --data-binary '@test_request.tsq' http://localhost:3000/api/v1/timestamp --output response.tsr
+curl -k -H “Content-Type: application/timestamp-query” -H Host:timestamp.globalsign.com --data-binary @test_request.tsq “http://timestamp.globalsign.com”  >inputfile.txt.tsr
+curl -X 'POST' \
+  'https://rekor.sigstore.dev/api/v1/timestamp' \
+  -H 'accept: application/timestamp-reply' \
+  -H 'Content-Type: application/timestamp-query' \
+  --data-binary '@test_request.tsq' --output response.tsr */

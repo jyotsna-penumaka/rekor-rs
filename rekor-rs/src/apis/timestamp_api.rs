@@ -10,10 +10,12 @@
 
 
 use reqwest;
-
 use crate::apis::ResponseContent;
 use super::{Error, configuration};
 
+// Case 1:
+use std::fs;
+use std::io::Read;
 
 /// struct for typed errors of method [`get_timestamp_cert_chain`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -73,7 +75,27 @@ pub async fn get_timestamp_response(configuration: &configuration::Configuration
     if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
         local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
     }
-    local_var_req_builder = local_var_req_builder.json(&request);
+
+    // local_var_req_builder = local_var_req_builder.json(&request);
+    
+/*     
+    // attempt #1 : 
+    //read the binar data and use that as the body
+    // https://www.reddit.com/r/rust/comments/dekpl5/how_to_read_binary_data_from_a_file_into_a_vecu8/ 
+    let mut f = fs::File::open(&request).expect("no file found");
+    let metadata = fs::metadata(&request).expect("unable to read metadata");
+    let mut buffer = vec![0; metadata.len() as usize];
+    f.read(&mut buffer).expect("buffer overflow");
+    local_var_req_builder = local_var_req_builder.json(&buffer);
+    // Error : "{\"code\":400,\"message\":\"Error generating timestamp response\"}"
+*/
+
+/*     // attempt #2:
+    // Send the file as the body by using the file descriptor
+    let file = fs::File::open(request)?;
+    local_var_req_builder = local_var_req_builder.body(&file);
+    // Error: the trait `From<&File>` is not implemented for `reqwest::Body` */
+
 
     let local_var_req = local_var_req_builder.build()?;
 
@@ -81,7 +103,8 @@ pub async fn get_timestamp_response(configuration: &configuration::Configuration
 
     let local_var_status = local_var_resp.status();
     let local_var_content = local_var_resp.text().await?;
-
+    println!("{:#?}", local_var_content);
+    
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
@@ -90,4 +113,3 @@ pub async fn get_timestamp_response(configuration: &configuration::Configuration
         Err(Error::ResponseError(local_var_error))
     }
 }
-
