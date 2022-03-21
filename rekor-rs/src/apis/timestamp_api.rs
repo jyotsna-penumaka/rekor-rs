@@ -15,7 +15,7 @@ use super::{Error, configuration};
 
 // Case 1:
 use std::fs;
-use std::io::Read;
+use std::io::Write;
 
 /// struct for typed errors of method [`get_timestamp_cert_chain`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -64,7 +64,7 @@ pub async fn get_timestamp_cert_chain(configuration: &configuration::Configurati
     }
 }
 
-pub async fn get_timestamp_response(configuration: &configuration::Configuration, request: std::path::PathBuf) -> Result<std::path::PathBuf, Error<GetTimestampResponseError>> {
+pub async fn get_timestamp_response(configuration: &configuration::Configuration, timestamp_request: std::path::PathBuf) -> Result<std::path::PathBuf, Error<GetTimestampResponseError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -74,39 +74,24 @@ pub async fn get_timestamp_response(configuration: &configuration::Configuration
 
     if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
         local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+        local_var_req_builder = local_var_req_builder.header(reqwest::header::ACCEPT, "application/timestamp-reply");
+        local_var_req_builder = local_var_req_builder.header(reqwest::header::CONTENT_TYPE, "application/timestamp-query");
     }
 
-    // local_var_req_builder = local_var_req_builder.json(&request);
-    
-/*     
-    // attempt #1 : 
-    //read the binar data and use that as the body
-    // https://www.reddit.com/r/rust/comments/dekpl5/how_to_read_binary_data_from_a_file_into_a_vecu8/ 
-    let mut f = fs::File::open(&request).expect("no file found");
-    let metadata = fs::metadata(&request).expect("unable to read metadata");
-    let mut buffer = vec![0; metadata.len() as usize];
-    f.read(&mut buffer).expect("buffer overflow");
-    local_var_req_builder = local_var_req_builder.json(&buffer);
-    // Error : "{\"code\":400,\"message\":\"Error generating timestamp response\"}"
-*/
-
-/*     // attempt #2:
-    // Send the file as the body by using the file descriptor
-    let file = fs::File::open(request)?;
-    local_var_req_builder = local_var_req_builder.body(&file);
-    // Error: the trait `From<&File>` is not implemented for `reqwest::Body` */
-
-
+    let contents = fs::read(timestamp_request)?;
+    local_var_req_builder = local_var_req_builder.body(contents);
     let local_var_req = local_var_req_builder.build()?;
 
     let local_var_resp = local_var_client.execute(local_var_req).await?;
 
     let local_var_status = local_var_resp.status();
     let local_var_content = local_var_resp.text().await?;
-    println!("{:#?}", local_var_content);
-    
+
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
-        serde_json::from_str(&local_var_content).map_err(Error::from)
+        let path = "response.tsr";
+        let mut output = fs::File::create(path)?;
+        write!(output, "{}", local_var_content)?;
+        Ok((std::env::current_exe()?).join(path))
     } else {
         let local_var_entity: Option<GetTimestampResponseError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
