@@ -56,6 +56,8 @@ pub async fn get_timestamp_cert_chain(configuration: &configuration::Configurati
     let local_var_status = local_var_resp.status();
     let local_var_content = local_var_resp.text().await?;
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+        // Jyotsna: Directly return the certificate chain instead of using serde to convert it to a string
+        // serde_json::from_str(&local_var_content).map_err(Error::from)
         Ok(local_var_content)
     } else {
         let local_var_entity: Option<GetTimestampCertChainError> = serde_json::from_str(&local_var_content).ok();
@@ -74,6 +76,7 @@ pub async fn get_timestamp_response(configuration: &configuration::Configuration
 
     if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
         local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+        // Jyotsna: specify the header for the request (review L#80 and L#81)
         local_var_req_builder = local_var_req_builder.header(reqwest::header::ACCEPT, "application/timestamp-reply");
         local_var_req_builder = local_var_req_builder.header(reqwest::header::CONTENT_TYPE, "application/timestamp-query");
     }
@@ -88,6 +91,7 @@ pub async fn get_timestamp_response(configuration: &configuration::Configuration
     let local_var_content = local_var_resp.text().await?;
 
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+        // Jyotsna: Save the response returned by rekor in a file and return the path (review L#95 - L#98)
         let path = "response.tsr";
         let mut output = fs::File::create(path)?;
         write!(output, "{}", local_var_content)?;

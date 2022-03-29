@@ -42,6 +42,7 @@ pub struct Spec {
     data: Data,
 }
 
+// Jyotsna : Designe a SPEC struct (review L#46 - L#112)
 impl Spec {
     pub fn new(signature: Signature, data: Data) -> Spec {
         Spec { signature, data }
@@ -80,9 +81,6 @@ impl PublicKey {
     }
 }
 
-// get rid of the default
-// change url type from string -> URL type
-/// Stores the Hash struct and location of the file
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Data {
@@ -90,7 +88,6 @@ pub struct Data {
     url: Url,
 }
 
-// use &str instead, build a URL from it
 impl Data {
     pub fn new(hash: Hash, url: Url) -> Data {
         Data { hash, url }
@@ -105,12 +102,6 @@ pub struct Hash {
     value: String,
 }
 
-// implement the default trait
-// Hash would be an enum or string (decide!)
-// make the feilds private, and within the new method in Hash just validate if the algorithm is what you expect
-// a new method, from_sha256 hardcodes algorithm as sha256
-// get rid of hash builder
-// value: vec<u8> instead of a string, because you will read it from a file
 impl Hash {
     pub fn new(algorithm: String, value: String) -> Hash {
         Hash {

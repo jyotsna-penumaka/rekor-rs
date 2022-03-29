@@ -4,6 +4,8 @@ use openapi::models::rekord::{Hash, Data, PublicKey, Signature, Spec};
 use url::Url;
 use std::path::PathBuf;
 
+// Jyotsna: Test the functionality of the Rekor Rust API (review the whole file)
+
 #[tokio::main]
 async fn main() {
     let configuration = Configuration::default();
