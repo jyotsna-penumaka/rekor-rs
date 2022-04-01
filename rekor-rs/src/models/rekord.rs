@@ -11,21 +11,20 @@
 /// Rekord : Rekord object
 
 
-use url::Url;
 
-#[derive(Clone,Debug, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct Rekord {
     #[serde(rename = "kind")]
     pub kind: String,
     #[serde(rename = "apiVersion")]
     pub api_version: String,
     #[serde(rename = "spec")]
-    pub spec: Spec,
+    pub spec: serde_json::Value,
 }
 
 impl Rekord {
     /// Rekord object
-    pub fn new(kind: String, api_version: String, spec: Spec) -> Rekord {
+    pub fn new(kind: String, api_version: String, spec: serde_json::Value) -> Rekord {
         Rekord {
             kind,
             api_version,
@@ -34,80 +33,4 @@ impl Rekord {
     }
 }
 
-/// Stores the Signature and Data struct
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct Spec {
-    signature: Signature,
-    data: Data,
-}
-
-// Jyotsna : Designe a SPEC struct (review L#46 - L#112)
-impl Spec {
-    pub fn new(signature: Signature, data: Data) -> Spec {
-        Spec { signature, data }
-    }
-}
-
-/// Stores the signature format, signature of the artifact and the PublicKey struct
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct Signature {
-    format: String,
-    content: String,
-    public_key: PublicKey,
-}
-
-impl Signature {
-    pub fn new(format: String, content: String, public_key: PublicKey) -> Signature {
-        Signature {
-            format,
-            content,
-            public_key,
-        }
-    }
-}
-
-/// Stores the public key used to sign the artifact
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct PublicKey {
-    content: String,
-}
-
-impl PublicKey {
-    pub fn new(content: String) -> PublicKey {
-        PublicKey { content }
-    }
-}
-
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct Data {
-    hash: Hash,
-    url: Url,
-}
-
-impl Data {
-    pub fn new(hash: Hash, url: Url) -> Data {
-        Data { hash, url }
-    }
-}
-
-/// Stores the algorithm used to hash the artifact and the value of the hash
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct Hash {
-    algorithm: String,
-    value: String,
-}
-
-impl Hash {
-    pub fn new(algorithm: String, value: String) -> Hash {
-        Hash {
-            algorithm,
-            value,
-        }
-    }
-}
 

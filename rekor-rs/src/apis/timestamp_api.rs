@@ -10,12 +10,10 @@
 
 
 use reqwest;
+
 use crate::apis::ResponseContent;
 use super::{Error, configuration};
 
-// Case 1:
-use std::fs;
-use std::io::Write;
 
 /// struct for typed errors of method [`get_timestamp_cert_chain`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -55,10 +53,9 @@ pub async fn get_timestamp_cert_chain(configuration: &configuration::Configurati
 
     let local_var_status = local_var_resp.status();
     let local_var_content = local_var_resp.text().await?;
+
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
-        // Jyotsna: Directly return the certificate chain instead of using serde to convert it to a string
-        // serde_json::from_str(&local_var_content).map_err(Error::from)
-        Ok(local_var_content)
+        serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
         let local_var_entity: Option<GetTimestampCertChainError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
@@ -66,7 +63,7 @@ pub async fn get_timestamp_cert_chain(configuration: &configuration::Configurati
     }
 }
 
-pub async fn get_timestamp_response(configuration: &configuration::Configuration, timestamp_request: std::path::PathBuf) -> Result<std::path::PathBuf, Error<GetTimestampResponseError>> {
+pub async fn get_timestamp_response(configuration: &configuration::Configuration, request: std::path::PathBuf) -> Result<std::path::PathBuf, Error<GetTimestampResponseError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -76,29 +73,21 @@ pub async fn get_timestamp_response(configuration: &configuration::Configuration
 
     if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
         local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
-        // Jyotsna: specify the header for the request (review L#80 and L#81)
-        local_var_req_builder = local_var_req_builder.header(reqwest::header::ACCEPT, "application/timestamp-reply");
-        local_var_req_builder = local_var_req_builder.header(reqwest::header::CONTENT_TYPE, "application/timestamp-query");
     }
+    local_var_req_builder = local_var_req_builder.json(&request);
 
-    let contents = fs::read(timestamp_request)?;
-    local_var_req_builder = local_var_req_builder.body(contents);
     let local_var_req = local_var_req_builder.build()?;
-
     let local_var_resp = local_var_client.execute(local_var_req).await?;
 
     let local_var_status = local_var_resp.status();
     let local_var_content = local_var_resp.text().await?;
 
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
-        // Jyotsna: Save the response returned by rekor in a file and return the path (review L#95 - L#98)
-        let path = "response.tsr";
-        let mut output = fs::File::create(path)?;
-        write!(output, "{}", local_var_content)?;
-        Ok((std::env::current_exe()?).join(path))
+        serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
         let local_var_entity: Option<GetTimestampResponseError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
+

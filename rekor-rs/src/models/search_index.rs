@@ -16,7 +16,7 @@ pub struct SearchIndex {
     #[serde(rename = "email", skip_serializing_if = "Option::is_none")]
     pub email: Option<String>,
     #[serde(rename = "publicKey", skip_serializing_if = "Option::is_none")]
-    pub public_key: Option<Box<crate::models::search_index_public_key::SearchIndexPublicKey>>,
+    pub public_key: Option<Box<crate::models::SearchIndexPublicKey>>,
     #[serde(rename = "hash", skip_serializing_if = "Option::is_none")]
     pub hash: Option<String>,
 }

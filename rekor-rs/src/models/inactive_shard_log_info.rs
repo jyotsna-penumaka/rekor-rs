@@ -12,7 +12,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-pub struct LogInfo {
+pub struct InactiveShardLogInfo {
     /// The current hash value stored at the root of the merkle tree
     #[serde(rename = "rootHash")]
     pub root_hash: String,
@@ -25,18 +25,15 @@ pub struct LogInfo {
     /// The current treeID
     #[serde(rename = "treeID")]
     pub tree_id: String,
-    #[serde(rename = "inactiveShards", skip_serializing_if = "Option::is_none")]
-    pub inactive_shards: Option<Vec<crate::models::InactiveShardLogInfo>>,
 }
 
-impl LogInfo {
-    pub fn new(root_hash: String, tree_size: i32, signed_tree_head: String, tree_id: String) -> LogInfo {
-        LogInfo {
+impl InactiveShardLogInfo {
+    pub fn new(root_hash: String, tree_size: i32, signed_tree_head: String, tree_id: String) -> InactiveShardLogInfo {
+        InactiveShardLogInfo {
             root_hash,
             tree_size,
             signed_tree_head,
             tree_id,
-            inactive_shards: None,
         }
     }
 }

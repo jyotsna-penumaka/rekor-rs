@@ -48,6 +48,7 @@ Class | Method | HTTP request | Description
  - [HashedrekordAllOf](docs/HashedrekordAllOf.md)
  - [Helm](docs/Helm.md)
  - [HelmAllOf](docs/HelmAllOf.md)
+ - [InactiveShardLogInfo](docs/InactiveShardLogInfo.md)
  - [InclusionProof](docs/InclusionProof.md)
  - [Intoto](docs/Intoto.md)
  - [IntotoAllOf](docs/IntotoAllOf.md)

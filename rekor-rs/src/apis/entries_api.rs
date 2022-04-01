@@ -13,7 +13,7 @@ use reqwest;
 
 use crate::apis::ResponseContent;
 use super::{Error, configuration};
-use crate::models::log_entry::LogEntry;
+
 
 /// struct for typed errors of method [`create_log_entry`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -52,15 +52,9 @@ pub enum SearchLogQueryError {
     UnknownValue(serde_json::Value),
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct LogEntries {
-    entries: Vec<LogEntry>
-}
 
 /// Creates an entry in the transparency log for a detached signature, public key, and content. Items can be included in the request or fetched by the server when URLs are specified. 
-// Jyotsna: Changed the return value of the function to LogEntry from ::std::collections::HashMap<String, serde_json::Value> (review L#63)
-pub async fn create_log_entry(configuration: &configuration::Configuration, proposed_entry: crate::models::ProposedEntry) -> Result<LogEntry, Error<CreateLogEntryError>> {
+pub async fn create_log_entry(configuration: &configuration::Configuration, proposed_entry: crate::models::ProposedEntry) -> Result<::std::collections::HashMap<String, serde_json::Value>, Error<CreateLogEntryError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -78,13 +72,9 @@ pub async fn create_log_entry(configuration: &configuration::Configuration, prop
 
     let local_var_status = local_var_resp.status();
     let local_var_content = local_var_resp.text().await?;
-    
+
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
-        // Jyotsna : Format the returned response such that it can be read into a struct (review L#84 - L#87)
-        let uuid: &str = &local_var_content[1..67];
-        let rest: &str = &local_var_content[69..local_var_content.len() - 2];
-        let sum = "{\"uuid\": ".to_string() + &(uuid.to_owned()) + "," + rest;
-        serde_json::from_str::<LogEntry>(&sum).map_err(Error::from)
+        serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
         let local_var_entity: Option<CreateLogEntryError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
@@ -92,8 +82,7 @@ pub async fn create_log_entry(configuration: &configuration::Configuration, prop
     }
 }
 
-// Jyotsna: Changed the return value of the function to LogEntry from ::std::collections::HashMap<String, serde_json::Value> (review L#96)
-pub async fn get_log_entry_by_index(configuration: &configuration::Configuration, log_index: i32) -> Result<LogEntry, Error<GetLogEntryByIndexError>> {
+pub async fn get_log_entry_by_index(configuration: &configuration::Configuration, log_index: i32) -> Result<::std::collections::HashMap<String, serde_json::Value>, Error<GetLogEntryByIndexError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -113,11 +102,7 @@ pub async fn get_log_entry_by_index(configuration: &configuration::Configuration
     let local_var_content = local_var_resp.text().await?;
 
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
-        // Jyotsna : Format the returned response such that it can be read into a struct (review L#117 - L#120)
-        let uuid: &str = &local_var_content[1..67];
-        let rest: &str = &local_var_content[69..local_var_content.len() - 2];
-        let sum = "{\"uuid\": ".to_string() + &(uuid.to_owned()) + "," + rest;
-        serde_json::from_str::<LogEntry>(&sum).map_err(Error::from)
+        serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
         let local_var_entity: Option<GetLogEntryByIndexError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
@@ -126,8 +111,7 @@ pub async fn get_log_entry_by_index(configuration: &configuration::Configuration
 }
 
 /// Returns the entry, root hash, tree size, and a list of hashes that can be used to calculate proof of an entry being included in the transparency log
-// Jyotsna: Changed the return value of the function to LogEntry from ::std::collections::HashMap<String, serde_json::Value> (review L#130)
-pub async fn get_log_entry_by_uuid(configuration: &configuration::Configuration, entry_uuid: &str) -> Result<LogEntry, Error<GetLogEntryByUuidError>> {
+pub async fn get_log_entry_by_uuid(configuration: &configuration::Configuration, entry_uuid: &str) -> Result<::std::collections::HashMap<String, serde_json::Value>, Error<GetLogEntryByUuidError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -146,11 +130,7 @@ pub async fn get_log_entry_by_uuid(configuration: &configuration::Configuration,
     let local_var_content = local_var_resp.text().await?;
 
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
-        // Jyotsna : Format the returned response such that it can be read into a struct (review L#150 - L#153)
-        let uuid: &str = &local_var_content[1..67];
-        let rest: &str = &local_var_content[69..local_var_content.len() - 2];
-        let sum = "{\"uuid\": ".to_string() + &(uuid.to_owned()) + "," + rest;
-        serde_json::from_str::<LogEntry>(&sum).map_err(Error::from)
+        serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
         let local_var_entity: Option<GetLogEntryByUuidError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
@@ -158,9 +138,7 @@ pub async fn get_log_entry_by_uuid(configuration: &configuration::Configuration,
     }
 }
 
-// Jyotsna: Return the vector of Log Entries as a String (review L#163).
-// Jyotsna TO DO: find a way to edit the response such that the output of this function can be a vector of log entries.
-pub async fn search_log_query(configuration: &configuration::Configuration, entry: crate::models::SearchLogQuery) -> Result<std::string::String, Error<SearchLogQueryError>> {
+pub async fn search_log_query(configuration: &configuration::Configuration, entry: crate::models::SearchLogQuery) -> Result<Vec<crate::models::Map>, Error<SearchLogQueryError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -180,12 +158,11 @@ pub async fn search_log_query(configuration: &configuration::Configuration, entr
     let local_var_content = local_var_resp.text().await?;
 
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
-        Ok(local_var_content)
+        serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
         let local_var_entity: Option<SearchLogQueryError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
-
 
