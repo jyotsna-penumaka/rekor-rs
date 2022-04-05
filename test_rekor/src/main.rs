@@ -94,7 +94,7 @@ async fn main() {
     println!("____________________________________________________________________________");
     println!("____________________________________________________________________________");
     println!("Test#6 get_public_key");
-    let pubkey = pubkey_api::get_public_key(&configuration).await;
+    let pubkey = pubkey_api::get_public_key(&configuration, None).await;
     println!("{:#?}", pubkey);
 
     // Test#7 get_rekor_version
@@ -121,17 +121,18 @@ async fn main() {
     let response_path = timestamp_api::get_timestamp_response(&configuration, request_path).await.unwrap();
     println!("Rekor's response was saved in: {:#?}", response_path);
 
-    // Test#10 get_log_info
+    /* // Test#10 get_log_info
     println!("____________________________________________________________________________");
     println!("____________________________________________________________________________");
     println!("Test#10 get_log_info");
     let log_info : LogInfo = tlog_api::get_log_info(&configuration).await.unwrap();
-    println!("{:#?}", log_info);
+    println!("{:#?}", log_info); */
 
+    // TO DO: figure out why Test #11 fails when I uncomment Test #10
     // Test#11 get_log_proof
     println!("____________________________________________________________________________");
     println!("____________________________________________________________________________");
     println!("Test#11 get_log_proof");
-    let log_proof : ConsistencyProof = tlog_api::get_log_proof(&configuration, 10, None).await.unwrap();
+    let log_proof : ConsistencyProof = tlog_api::get_log_proof(&configuration, 10, None, None).await.unwrap();
     println!("{:#?}", log_proof);
 }
