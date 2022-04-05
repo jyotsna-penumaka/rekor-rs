@@ -17,6 +17,9 @@ use super::{Error, configuration};
 use std::fs;
 use std::io::Write;
 
+use std::os::unix::fs::PermissionsExt;
+use std::path::PathBuf;
+
 /// struct for typed errors of method [`get_timestamp_cert_chain`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
@@ -92,10 +95,14 @@ pub async fn get_timestamp_response(configuration: &configuration::Configuration
 
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         // Save the response returned by rekor in a file and return the path
-        let path = "response.tsr";
-        let mut output = fs::File::create(path)?;
+        let file_name = "response.tsr";
+        let mut output = fs::File::create(file_name)?;
+        let metadata = output.metadata()?;
+        let mut permissions = metadata.permissions();
+        permissions.set_mode(0o644);
+
         write!(output, "{}", local_var_content)?;
-        Ok((std::env::current_exe()?).join(path))
+        Ok(PathBuf::from(file_name))
     } else {
         let local_var_entity: Option<GetTimestampResponseError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };

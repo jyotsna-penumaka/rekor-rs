@@ -17,14 +17,14 @@ pub struct ConsistencyProof {
     #[serde(rename = "rootHash")]
     pub root_hash: String,
     #[serde(rename = "hashes")]
-    pub hashes: Vec<String>,
+    pub hashes: Vec<String>
 }
 
 impl ConsistencyProof {
     pub fn new(root_hash: String, hashes: Vec<String>) -> ConsistencyProof {
         ConsistencyProof {
             root_hash,
-            hashes,
+            hashes
         }
     }
 }

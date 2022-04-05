@@ -13,7 +13,7 @@
 
 use url::Url;
 
-#[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct Rekord {
     #[serde(rename = "kind")]
     pub kind: String,
