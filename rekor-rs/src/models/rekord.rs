@@ -42,7 +42,7 @@ pub struct Spec {
     data: Data,
 }
 
-// Jyotsna : Designe a SPEC struct (review L#46 - L#112)
+// Design a SPEC struct
 impl Spec {
     pub fn new(signature: Signature, data: Data) -> Spec {
         Spec { signature, data }

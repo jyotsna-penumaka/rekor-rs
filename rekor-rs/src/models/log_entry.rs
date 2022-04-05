@@ -1,4 +1,4 @@
-// Jyotsna: Design a struct that stores the response returned by Rekor after making a new entry (review the whole file)
+// Design a struct that stores the response returned by Rekor after making a new entry
 
 /// Stores the response returned by Rekor after making a new entry
 // get rid of default
