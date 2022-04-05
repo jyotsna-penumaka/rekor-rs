@@ -38,7 +38,7 @@ No authorization required
 
 ## get_log_proof
 
-> crate::models::ConsistencyProof get_log_proof(last_size, first_size)
+> crate::models::ConsistencyProof get_log_proof(last_size, first_size, tree_id)
 Get information required to generate a consistency proof for the transparency log
 
 Returns a list of hashes for specified tree sizes that can be used to confirm the consistency of the transparency log
@@ -50,6 +50,7 @@ Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
 **last_size** | **i32** | The size of the tree that you wish to prove consistency to | [required] |
 **first_size** | Option<**i32**> | The size of the tree that you wish to prove consistency from (1 means the beginning of the log) Defaults to 1 if not specified  |  |[default to 1]
+**tree_id** | Option<**String**> | The tree ID of the tree that you wish to prove consistency for |  |
 
 ### Return type
 

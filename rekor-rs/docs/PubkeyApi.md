@@ -10,14 +10,17 @@ Method | HTTP request | Description
 
 ## get_public_key
 
-> String get_public_key()
+> String get_public_key(tree_id)
 Retrieve the public key that can be used to validate the signed tree head
 
 Returns the public key that can be used to validate the signed tree head
 
 ### Parameters
 
-This endpoint does not need any parameter.
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**tree_id** | Option<**String**> | The tree ID of the tree you wish to get a public key for |  |
 
 ### Return type
 

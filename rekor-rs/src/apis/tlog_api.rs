@@ -62,7 +62,7 @@ pub async fn get_log_info(configuration: &configuration::Configuration, ) -> Res
 }
 
 /// Returns a list of hashes for specified tree sizes that can be used to confirm the consistency of the transparency log
-pub async fn get_log_proof(configuration: &configuration::Configuration, last_size: i32, first_size: Option<i32>) -> Result<crate::models::ConsistencyProof, Error<GetLogProofError>> {
+pub async fn get_log_proof(configuration: &configuration::Configuration, last_size: i32, first_size: Option<i32>, tree_id: Option<&str>) -> Result<crate::models::ConsistencyProof, Error<GetLogProofError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -74,6 +74,9 @@ pub async fn get_log_proof(configuration: &configuration::Configuration, last_si
         local_var_req_builder = local_var_req_builder.query(&[("firstSize", &local_var_str.to_string())]);
     }
     local_var_req_builder = local_var_req_builder.query(&[("lastSize", &last_size.to_string())]);
+    if let Some(ref local_var_str) = tree_id {
+        local_var_req_builder = local_var_req_builder.query(&[("treeID", &local_var_str.to_string())]);
+    }
     if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
         local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
     }

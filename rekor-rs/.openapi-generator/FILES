@@ -12,6 +12,7 @@ docs/Hashedrekord.md
 docs/HashedrekordAllOf.md
 docs/Helm.md
 docs/HelmAllOf.md
+docs/InactiveShardLogInfo.md
 docs/InclusionProof.md
 docs/IndexApi.md
 docs/Intoto.md
@@ -54,6 +55,7 @@ src/models/hashedrekord.rs
 src/models/hashedrekord_all_of.rs
 src/models/helm.rs
 src/models/helm_all_of.rs
+src/models/inactive_shard_log_info.rs
 src/models/inclusion_proof.rs
 src/models/intoto.rs
 src/models/intoto_all_of.rs

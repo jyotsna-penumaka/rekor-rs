@@ -188,4 +188,3 @@ pub async fn search_log_query(configuration: &configuration::Configuration, entr
     }
 }
 
-

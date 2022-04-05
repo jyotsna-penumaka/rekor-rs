@@ -25,7 +25,7 @@ pub enum GetPublicKeyError {
 
 
 /// Returns the public key that can be used to validate the signed tree head
-pub async fn get_public_key(configuration: &configuration::Configuration, ) -> Result<String, Error<GetPublicKeyError>> {
+pub async fn get_public_key(configuration: &configuration::Configuration, tree_id: Option<&str>) -> Result<String, Error<GetPublicKeyError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -33,6 +33,9 @@ pub async fn get_public_key(configuration: &configuration::Configuration, ) -> R
     let local_var_uri_str = format!("{}/api/v1/log/publicKey", local_var_configuration.base_path);
     let mut local_var_req_builder = local_var_client.request(reqwest::Method::GET, local_var_uri_str.as_str());
 
+    if let Some(ref local_var_str) = tree_id {
+        local_var_req_builder = local_var_req_builder.query(&[("treeID", &local_var_str.to_string())]);
+    }
     if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
         local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
     }
