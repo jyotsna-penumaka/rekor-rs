@@ -94,16 +94,22 @@ impl Data {
     }
 }
 
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum AlgorithmKind {
+    Sha256,
+    Sha1,
+}
+
 /// Stores the algorithm used to hash the artifact and the value of the hash
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Hash {
-    algorithm: String,
+    algorithm: AlgorithmKind,
     value: String,
 }
 
 impl Hash {
-    pub fn new(algorithm: String, value: String) -> Hash {
+    pub fn new(algorithm: AlgorithmKind, value: String) -> Hash {
         Hash {
             algorithm,
             value,

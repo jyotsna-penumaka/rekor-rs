@@ -1,7 +1,7 @@
 use openapi::apis::{configuration::Configuration, entries_api};
 use openapi::models::{
     log_entry::LogEntry,
-    rekord::{Data, Hash, PublicKey, Signature, Spec},
+    rekord::{Data, Hash, PublicKey, Signature, Spec, AlgorithmKind},
     ProposedEntry,
 };
 use url::Url;
@@ -10,7 +10,7 @@ use url::Url;
 async fn main() {
     let configuration = Configuration::default();
     let hash = Hash::new(
-        "sha256".to_string(),
+        AlgorithmKind::Sha256,
         "e2535d638859bb63ea9ea5cf467562cba63b007eae1acd0d73a3f259c582561f".to_string(),
     );
     let data = Data::new(
