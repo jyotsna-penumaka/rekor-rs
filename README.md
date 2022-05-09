@@ -1,4 +1,9 @@
 # rekor-rs
+
+Continuous integration | Docs | License
+ ----------------------|------|---------
+ [![Continuous integration](https://github.com/sigstore/sigstore-rs/actions/workflows/tests.yml/badge.svg)](https://github.com/sigstore/sigstore-rs/actions/workflows/tests.yml) | [![Docs](https://img.shields.io/badge/docs-%20-blue)](https://sigstore.github.io/sigstore-rs/sigstore) |  [![License: Apache 2.0](https://img.shields.io/badge/License-Apache2.0-brightgreen.svg)](https://opensource.org/licenses/Apache-2.0)
+
 In order to test the code :-
 ```
 cd test_rekor
