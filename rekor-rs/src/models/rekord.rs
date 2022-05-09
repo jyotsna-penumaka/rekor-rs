@@ -95,9 +95,10 @@ impl Data {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(non_camel_case_types)]
 pub enum AlgorithmKind {
-    Sha256,
-    Sha1,
+    sha256,
+    sha1,
 }
 
 /// Stores the algorithm used to hash the artifact and the value of the hash

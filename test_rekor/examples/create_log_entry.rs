@@ -10,7 +10,7 @@ use url::Url;
 async fn main() {
     let configuration = Configuration::default();
     let hash = Hash::new(
-        AlgorithmKind::Sha256,
+        AlgorithmKind::sha256,
         "e2535d638859bb63ea9ea5cf467562cba63b007eae1acd0d73a3f259c582561f".to_string(),
     );
     let data = Data::new(

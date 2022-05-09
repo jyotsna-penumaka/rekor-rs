@@ -78,7 +78,7 @@ pub async fn create_log_entry(configuration: &configuration::Configuration, prop
 
     let local_var_status = local_var_resp.status();
     let local_var_content = local_var_resp.text().await?;
-    
+
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         // Format the returned response such that it can be read into a struct
         let uuid: &str = &local_var_content[1..67];
