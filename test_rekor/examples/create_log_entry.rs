@@ -16,7 +16,7 @@
 use openapi::apis::{configuration::Configuration, entries_api};
 use openapi::models::{
     log_entry::LogEntry,
-    rekord::{Data, Hash, PublicKey, Signature, Spec, AlgorithmKind},
+    rekord::{AlgorithmKind, Data, Hash, PublicKey, Signature, Spec},
     ProposedEntry,
 };
 use url::Url;
