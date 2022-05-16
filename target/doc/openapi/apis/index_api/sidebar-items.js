@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["SearchIndexError","struct for typed errors of method [`search_index`]"]],"fn":[["search_index",""]]});

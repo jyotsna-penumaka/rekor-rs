@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["GetPublicKeyError","struct for typed errors of method [`get_public_key`]"]],"fn":[["get_public_key","Returns the public key that can be used to validate the signed tree head"]]});
