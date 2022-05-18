@@ -87,7 +87,7 @@ pub async fn create_log_entry(
         // Format the returned response such that it can be read into a struct
         let uuid: &str = &local_var_content[1..67];
         let rest: &str = &local_var_content[69..local_var_content.len() - 2];
-        let sum = "{\"uuid\": ".to_string() + &(uuid.to_owned()) + "," + rest;
+        let sum = "{\"uuid\": ".to_string() + &uuid + "," + rest;
         serde_json::from_str::<LogEntry>(&sum).map_err(Error::from)
     } else {
         let local_var_entity: Option<CreateLogEntryError> =
@@ -130,7 +130,7 @@ pub async fn get_log_entry_by_index(
         // Format the returned response such that it can be read into a struct
         let uuid: &str = &local_var_content[1..67];
         let rest: &str = &local_var_content[69..local_var_content.len() - 2];
-        let sum = "{\"uuid\": ".to_string() + &(uuid.to_owned()) + "," + rest;
+        let sum = "{\"uuid\": ".to_string() + &uuid + "," + rest;
         serde_json::from_str::<LogEntry>(&sum).map_err(Error::from)
     } else {
         let local_var_entity: Option<GetLogEntryByIndexError> =
@@ -176,7 +176,7 @@ pub async fn get_log_entry_by_uuid(
         // Format the returned response such that it can be read into a struct
         let uuid: &str = &local_var_content[1..67];
         let rest: &str = &local_var_content[69..local_var_content.len() - 2];
-        let sum = "{\"uuid\": ".to_string() + &(uuid.to_owned()) + "," + rest;
+        let sum = "{\"uuid\": ".to_string() + &uuid + "," + rest;
         serde_json::from_str::<LogEntry>(&sum).map_err(Error::from)
     } else {
         let local_var_entity: Option<GetLogEntryByUuidError> =
