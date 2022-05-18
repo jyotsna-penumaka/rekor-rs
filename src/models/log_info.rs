@@ -27,11 +27,7 @@ pub struct LogInfo {
 }
 
 impl LogInfo {
-    pub fn new(
-        root_hash: String,
-        tree_size: i32,
-        signed_tree_head: String,
-    ) -> LogInfo {
+    pub fn new(root_hash: String, tree_size: i32, signed_tree_head: String) -> LogInfo {
         LogInfo {
             root_hash,
             tree_size,
