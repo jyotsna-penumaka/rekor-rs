@@ -1,1 +1,0 @@
-initSidebarItems({"struct":[["Jar","Jar : Java Archive (JAR)"]]});

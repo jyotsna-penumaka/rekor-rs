@@ -1,1 +1,0 @@
-initSidebarItems({"enum":[["GetTimestampCertChainError","struct for typed errors of method [`get_timestamp_cert_chain`]"],["GetTimestampResponseError","struct for typed errors of method [`get_timestamp_response`]"]],"fn":[["get_timestamp_cert_chain","Returns the certfiicate chain for timestamping that can be used to validate trusted timestamps"],["get_timestamp_response",""]]});

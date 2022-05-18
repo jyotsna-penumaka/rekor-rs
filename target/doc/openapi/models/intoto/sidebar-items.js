@@ -1,1 +1,0 @@
-initSidebarItems({"struct":[["Intoto","Intoto : Intoto object"]]});

@@ -1,1 +1,0 @@
-initSidebarItems({"struct":[["Alpine","Alpine : Alpine package"]]});

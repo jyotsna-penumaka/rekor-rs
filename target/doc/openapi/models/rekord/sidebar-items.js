@@ -1,1 +1,0 @@
-initSidebarItems({"enum":[["AlgorithmKind",""]],"struct":[["Data",""],["Hash","Stores the algorithm used to hash the artifact and the value of the hash"],["PublicKey","Stores the public key used to sign the artifact"],["Rekord",""],["Signature","Stores the signature format, signature of the artifact and the PublicKey struct"],["Spec","Stores the Signature and Data struct"]]});

@@ -1,1 +1,0 @@
-initSidebarItems({"struct":[["Attestation",""],["InclusionProof","Stores the signature over the artifact’s logID, logIndex, body and integratedTime."],["LogEntry","Stores the response returned by Rekor after making a new entry"],["Verification","Stores the signature over the artifact’s logID, logIndex, body and integratedTime."]]});

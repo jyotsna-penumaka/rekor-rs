@@ -1,1 +1,0 @@
-initSidebarItems({"struct":[["Rpm","Rpm : RPM package"]]});

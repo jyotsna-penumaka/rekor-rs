@@ -1,1 +1,0 @@
-initSidebarItems({"struct":[["ApiKey",""],["Configuration",""]],"type":[["BasicAuth",""]]});

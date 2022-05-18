@@ -1,1 +1,0 @@
-initSidebarItems({"struct":[["Tuf","Tuf : TUF metadata"]]});
