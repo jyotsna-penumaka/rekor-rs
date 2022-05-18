@@ -55,7 +55,7 @@ pub async fn search_index(
             serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent {
             status: local_var_status,
-            content: local_var_content.to_string(),
+            content: local_var_content,
             entity: local_var_entity,
         };
         Err(Error::ResponseError(local_var_error))
