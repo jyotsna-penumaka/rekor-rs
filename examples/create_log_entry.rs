@@ -38,7 +38,7 @@ async fn main() {
      --key_format ssh\
      --api_version 0.0.1
      */
-     
+
     let matches = Command::new("cmd")
     .arg(Arg::new("hash")
              .long("hash")

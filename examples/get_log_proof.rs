@@ -13,10 +13,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use clap::{Arg, Command};
 use openapi::apis::{configuration::Configuration, tlog_api};
 use openapi::models::ConsistencyProof;
 use std::str::FromStr;
-use clap::{Arg, Command};
 
 #[tokio::main]
 async fn main() {

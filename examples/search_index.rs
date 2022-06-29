@@ -19,15 +19,14 @@ use openapi::models::{search_index_public_key, search_index_public_key::Format, 
 
 #[tokio::main]
 async fn main() {
-
-/* 
-Example command:
-cargo run --example search_index -- \
---hash e2535d638859bb63ea9ea5cf467562cba63b007eae1acd0d73a3f259c582561f \
---public_key c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSVA3M2tuT0tKYVNyVEtEa2U2OEgvRlJoODRZWU5CU0tBN1hPVWRpWmJjeG8gdGVzdEByZWtvci5kZXYK \
---key_format ssh \
---email jpenumak@redhat.com 
-*/
+    /*
+    Example command:
+    cargo run --example search_index -- \
+    --hash e2535d638859bb63ea9ea5cf467562cba63b007eae1acd0d73a3f259c582561f \
+    --public_key c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSVA3M2tuT0tKYVNyVEtEa2U2OEgvRlJoODRZWU5CU0tBN1hPVWRpWmJjeG8gdGVzdEByZWtvci5kZXYK \
+    --key_format ssh \
+    --email jpenumak@redhat.com
+    */
 
     let matches = Command::new("cmd")
     .arg(Arg::new("hash")
@@ -58,7 +57,7 @@ cargo run --example search_index -- \
         "x509" => Format::X509,
         "minisign" => Format::Minisign,
         "ssh" => Format::Ssh,
-        _ => Format::Tuf
+        _ => Format::Tuf,
     };
 
     let public_key = search_index_public_key::SearchIndexPublicKey {
