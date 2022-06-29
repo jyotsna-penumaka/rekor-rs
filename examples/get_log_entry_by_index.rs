@@ -13,13 +13,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use clap::{Arg, Command};
 use openapi::apis::{configuration::Configuration, entries_api};
 use openapi::models::log_entry::LogEntry;
+use std::str::FromStr;
 
 #[tokio::main]
 async fn main() {
+    /*
+    Retrieves an entry and inclusion proof from the transparency log (if it exists) by index
+    Example command :
+    cargo run --example get_log_entry_by_index -- --log_index 99
+    */
+    let matches = Command::new("cmd").arg(
+        Arg::new("log_index")
+            .long("log_index")
+            .takes_value(true)
+            .help("log_index of the artifact"),
+    );
+
+    let flags = matches.get_matches();
+    let index = <i32 as FromStr>::from_str(flags.value_of("log_index").unwrap_or("1")).unwrap();
+
     let configuration = Configuration::default();
-    let message: LogEntry = entries_api::get_log_entry_by_index(&configuration, 1)
+
+    let message: LogEntry = entries_api::get_log_entry_by_index(&configuration, index)
         .await
         .unwrap();
     println!("{:#?}", message);

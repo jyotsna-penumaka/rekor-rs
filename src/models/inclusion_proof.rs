@@ -12,13 +12,13 @@
 pub struct InclusionProof {
     /// The index of the entry in the transparency log
     #[serde(rename = "logIndex")]
-    pub log_index: i32,
+    pub log_index: i64,
     /// The hash value stored at the root of the merkle tree at the time the proof was generated
     #[serde(rename = "rootHash")]
     pub root_hash: String,
     /// The size of the merkle tree at the time the inclusion proof was generated
     #[serde(rename = "treeSize")]
-    pub tree_size: i32,
+    pub tree_size: i64,
     /// A list of hashes required to compute the inclusion proof, sorted in order from leaf to root
     #[serde(rename = "hashes")]
     pub hashes: Vec<String>,
@@ -26,9 +26,9 @@ pub struct InclusionProof {
 
 impl InclusionProof {
     pub fn new(
-        log_index: i32,
+        log_index: i64,
         root_hash: String,
-        tree_size: i32,
+        tree_size: i64,
         hashes: Vec<String>,
     ) -> InclusionProof {
         InclusionProof {

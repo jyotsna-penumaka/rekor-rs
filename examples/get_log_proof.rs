@@ -15,12 +15,42 @@
 
 use openapi::apis::{configuration::Configuration, tlog_api};
 use openapi::models::ConsistencyProof;
+use std::str::FromStr;
+use clap::{Arg, Command};
 
 #[tokio::main]
 async fn main() {
+    /*
+    Get information required to generate a consistency proof for the transparency log.
+    Returns a list of hashes for specified tree sizes that can be used to confirm the consistency of the transparency log.
+    Example command :
+    cargo run --example get_log_proof -- --last_size 10
+    cargo run --example get_log_proof -- --last_size 10 --first_size 1
+    */
+    let matches = Command::new("cmd")
+    .arg(Arg::new("last_size")
+             .long("last_size")
+             .takes_value(true)
+             .help("The size of the tree that you wish to prove consistency to"))
+    .arg(Arg::new("first_size")
+             .long("first_size")
+             .takes_value(true)
+             .help("The size of the tree that you wish to prove consistency from (1 means the beginning of the log). Defaults to 1. To use the default value, do not input any value"))
+    .arg(Arg::new("tree_id")
+             .long("tree_id")
+             .takes_value(true)
+             .help("The tree ID of the tree that you wish to prove consistency for. To use the default value, do not input any value."));
+
     let configuration = Configuration::default();
-    let log_proof: ConsistencyProof = tlog_api::get_log_proof(&configuration, 10, None, None)
-        .await
-        .unwrap();
+    let flags = matches.get_matches();
+
+    let log_proof: ConsistencyProof = tlog_api::get_log_proof(
+        &configuration,
+        <i32 as FromStr>::from_str(flags.value_of("last_size").unwrap_or("10")).unwrap(),
+        flags.value_of("first_size"),
+        flags.value_of("tree_id"),
+    )
+    .await
+    .unwrap();
     println!("{:#?}", log_proof);
 }

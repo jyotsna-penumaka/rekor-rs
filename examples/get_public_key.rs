@@ -13,11 +13,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use clap::{Arg, Command};
 use openapi::apis::{configuration::Configuration, pubkey_api};
 
 #[tokio::main]
 async fn main() {
+    /*
+    Returns the public key that can be used to validate the signed tree head
+    Example command :
+    cargo run --example get_public_key
+    */
+
+    let matches = Command::new("cmd")
+    .arg(Arg::new("tree_id")
+             .long("tree_id")
+             .takes_value(true)
+             .help("The tree ID of the tree that you wish to prove consistency for. To use the default value, do not input any value."));
+
+    let flags = matches.get_matches();
     let configuration = Configuration::default();
-    let pubkey = pubkey_api::get_public_key(&configuration, None).await;
+    let pubkey = pubkey_api::get_public_key(&configuration, flags.value_of("tree_id")).await;
     println!("{:#?}", pubkey.unwrap());
 }

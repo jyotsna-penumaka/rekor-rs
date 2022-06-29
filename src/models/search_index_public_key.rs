@@ -28,7 +28,7 @@ impl SearchIndexPublicKey {
     }
 }
 
-///
+///  The supported pluggable types to sign and upload data
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum Format {
     #[serde(rename = "pgp")]

@@ -57,21 +57,27 @@ pub struct LogEntries {
     entries: Vec<LogEntry>,
 }
 
+// Formats the returned response such that it can be read into a struct
+pub fn parse_response(local_var_content: String) -> String {
+    let uuid: &str = &local_var_content[1..67];
+    let rest: &str = &local_var_content[69..local_var_content.len() - 2];
+    let sum = "{\"uuid\": ".to_string() + uuid + "," + rest;
+    sum
+}
+
 /// Creates an entry in the transparency log for a detached signature, public key, and content. Items can be included in the request or fetched by the server when URLs are specified.
 // Change the return value of the function to LogEntry from ::std::collections::HashMap<String, serde_json::Value>
 pub async fn create_log_entry(
     configuration: &configuration::Configuration,
     proposed_entry: crate::models::ProposedEntry,
 ) -> Result<LogEntry, Error<CreateLogEntryError>> {
-    let local_var_configuration = configuration;
+    let local_var_client = &configuration.client;
 
-    let local_var_client = &local_var_configuration.client;
-
-    let local_var_uri_str = format!("{}/api/v1/log/entries", local_var_configuration.base_path);
+    let local_var_uri_str = format!("{}/api/v1/log/entries", configuration.base_path);
     let mut local_var_req_builder =
         local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
 
-    if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+    if let Some(ref local_var_user_agent) = configuration.user_agent {
         local_var_req_builder =
             local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
     }
@@ -84,11 +90,7 @@ pub async fn create_log_entry(
     let local_var_content = local_var_resp.text().await?;
 
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
-        // Format the returned response such that it can be read into a struct
-        let uuid: &str = &local_var_content[1..67];
-        let rest: &str = &local_var_content[69..local_var_content.len() - 2];
-        let sum = "{\"uuid\": ".to_string() + uuid + "," + rest;
-        serde_json::from_str::<LogEntry>(&sum).map_err(Error::from)
+        serde_json::from_str::<LogEntry>(&(parse_response(local_var_content))).map_err(Error::from)
     } else {
         let local_var_entity: Option<CreateLogEntryError> =
             serde_json::from_str(&local_var_content).ok();
@@ -101,21 +103,19 @@ pub async fn create_log_entry(
     }
 }
 
-// Change the return value of the function to LogEntry from ::std::collections::HashMap<String, serde_json::Value>
+/// Fetches the specified entry from the transparency log using the log index
 pub async fn get_log_entry_by_index(
     configuration: &configuration::Configuration,
     log_index: i32,
 ) -> Result<LogEntry, Error<GetLogEntryByIndexError>> {
-    let local_var_configuration = configuration;
+    let local_var_client = &configuration.client;
 
-    let local_var_client = &local_var_configuration.client;
-
-    let local_var_uri_str = format!("{}/api/v1/log/entries", local_var_configuration.base_path);
+    let local_var_uri_str = format!("{}/api/v1/log/entries", configuration.base_path);
     let mut local_var_req_builder =
         local_var_client.request(reqwest::Method::GET, local_var_uri_str.as_str());
 
     local_var_req_builder = local_var_req_builder.query(&[("logIndex", &log_index.to_string())]);
-    if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+    if let Some(ref local_var_user_agent) = configuration.user_agent {
         local_var_req_builder =
             local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
     }
@@ -127,11 +127,7 @@ pub async fn get_log_entry_by_index(
     let local_var_content = local_var_resp.text().await?;
 
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
-        // Format the returned response such that it can be read into a struct
-        let uuid: &str = &local_var_content[1..67];
-        let rest: &str = &local_var_content[69..local_var_content.len() - 2];
-        let sum = "{\"uuid\": ".to_string() + uuid + "," + rest;
-        serde_json::from_str::<LogEntry>(&sum).map_err(Error::from)
+        serde_json::from_str::<LogEntry>(&(parse_response(local_var_content))).map_err(Error::from)
     } else {
         let local_var_entity: Option<GetLogEntryByIndexError> =
             serde_json::from_str(&local_var_content).ok();
@@ -149,19 +145,17 @@ pub async fn get_log_entry_by_uuid(
     configuration: &configuration::Configuration,
     entry_uuid: &str,
 ) -> Result<LogEntry, Error<GetLogEntryByUuidError>> {
-    let local_var_configuration = configuration;
-
-    let local_var_client = &local_var_configuration.client;
+    let local_var_client = &configuration.client;
 
     let local_var_uri_str = format!(
         "{}/api/v1/log/entries/{entryUUID}",
-        local_var_configuration.base_path,
+        configuration.base_path,
         entryUUID = crate::apis::urlencode(entry_uuid)
     );
     let mut local_var_req_builder =
         local_var_client.request(reqwest::Method::GET, local_var_uri_str.as_str());
 
-    if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+    if let Some(ref local_var_user_agent) = configuration.user_agent {
         local_var_req_builder =
             local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
     }
@@ -173,11 +167,7 @@ pub async fn get_log_entry_by_uuid(
     let local_var_content = local_var_resp.text().await?;
 
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
-        // Format the returned response such that it can be read into a struct
-        let uuid: &str = &local_var_content[1..67];
-        let rest: &str = &local_var_content[69..local_var_content.len() - 2];
-        let sum = "{\"uuid\": ".to_string() + uuid + "," + rest;
-        serde_json::from_str::<LogEntry>(&sum).map_err(Error::from)
+        serde_json::from_str::<LogEntry>(&(parse_response(local_var_content))).map_err(Error::from)
     } else {
         let local_var_entity: Option<GetLogEntryByUuidError> =
             serde_json::from_str(&local_var_content).ok();
@@ -190,23 +180,18 @@ pub async fn get_log_entry_by_uuid(
     }
 }
 
-// Return the vector of Log Entries as a String
+// Returns the vector of Log Entries as a String
 pub async fn search_log_query(
     configuration: &configuration::Configuration,
     entry: crate::models::SearchLogQuery,
 ) -> Result<std::string::String, Error<SearchLogQueryError>> {
-    let local_var_configuration = configuration;
+    let local_var_client = &configuration.client;
 
-    let local_var_client = &local_var_configuration.client;
-
-    let local_var_uri_str = format!(
-        "{}/api/v1/log/entries/retrieve",
-        local_var_configuration.base_path
-    );
+    let local_var_uri_str = format!("{}/api/v1/log/entries/retrieve", configuration.base_path);
     let mut local_var_req_builder =
         local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
 
-    if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+    if let Some(ref local_var_user_agent) = configuration.user_agent {
         local_var_req_builder =
             local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
     }

@@ -15,6 +15,12 @@
 
 use openapi::apis::{configuration::Configuration, server_api};
 
+/*
+Gets the current version of the rekor server
+Example command :
+cargo run --example get_rekor_version
+*/
+
 #[tokio::main]
 async fn main() {
     let configuration = Configuration::default();

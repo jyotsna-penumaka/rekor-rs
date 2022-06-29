@@ -13,13 +13,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use clap::{Arg, Command};
 use openapi::apis::{configuration::Configuration, entries_api};
 use openapi::models::log_entry::LogEntry;
 
 #[tokio::main]
 async fn main() {
+    /*
+    Get log entry and information required to generate an inclusion proof for the entry in the transparency log
+
+    Example command :
+    cargo run --example get_log_entry_by_uuid -- --uuid 073970a07c978b7a9ff15b69fe15d87dfb58fd5756086e3d1fb671c2d0bd95c0
+    */
+    let matches = Command::new("cmd").arg(
+        Arg::new("uuid")
+            .long("uuid")
+            .takes_value(true)
+            .help("uuid of the artifact"),
+    );
+
+    let flags = matches.get_matches();
+    let uuid = flags
+        .value_of("uuid")
+        .unwrap_or("073970a07c978b7a9ff15b69fe15d87dfb58fd5756086e3d1fb671c2d0bd95c0")
+        .to_string();
     let configuration = Configuration::default();
-    let uuid = "073970a07c978b7a9ff15b69fe15d87dfb58fd5756086e3d1fb671c2d0bd95c0";
     let message: LogEntry = entries_api::get_log_entry_by_uuid(&configuration, &uuid)
         .await
         .unwrap();

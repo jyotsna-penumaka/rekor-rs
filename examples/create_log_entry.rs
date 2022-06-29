@@ -21,31 +21,83 @@ use openapi::models::{
 };
 use url::Url;
 
+use clap::{Arg, Command};
+
 #[tokio::main]
 async fn main() {
+    /*
+    Creates an entry in the transparency log for a detached signature, public key, and content.
+    Items can be included in the request or fetched by the server when URLs are specified.
+
+    Example command :
+    cargo run --example create_log_entry -- \
+     --hash 27b46cbb8b82ea64b6c8f0ba592b891e288fd24211516a7256d769463404fe7c\
+     --url https://raw.githubusercontent.com/jyotsna-penumaka/rekor-rs/rekor-functionality/test_data/data\
+     --public_key c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSVA3M2tuT0tKYVNyVEtEa2U2OEgvRlJoODRZWU5CU0tBN1hPVWRpWmJjeG8gdGVzdEByZWtvci5kZXYK\
+     --signature LS0tLS1CRUdJTiBTU0ggU0lHTkFUVVJFLS0tLS0KVTFOSVUwbEhBQUFBQVFBQUFETUFBQUFMYzNOb0xXVmtNalUxTVRrQUFBQWcvdmVTYzRvbHBLdE1vT1I3cndmOFZHSHpoaApnMEZJb0R0YzVSMkpsdHpHZ0FBQUFFWm1sc1pRQUFBQUFBQUFBR2MyaGhOVEV5QUFBQVV3QUFBQXR6YzJndFpXUXlOVFV4Ck9RQUFBRUJqc2pZdVhYcDliVGVtZ0xLMDk3TUZMNTlvZCtEd1NrU3NHWFQ5UUZsMDFnRVYzK2R5VmRBY3lGUWo0TmErY0cKVThtOVZhQXVhR1JZblJLUUpPNEs0QgotLS0tLUVORCBTU0ggU0lHTkFUVVJFLS0tLS0K\
+     --key_format ssh\
+     --api_version 0.0.1
+     */
+     
+    let matches = Command::new("cmd")
+    .arg(Arg::new("hash")
+             .long("hash")
+             .takes_value(true)
+             .help("hash of the artifact"))
+    .arg(Arg::new("url")
+             .long("url")
+             .takes_value(true)
+             .help("url containing the contents of the artifact (raw github url)"))
+    .arg(Arg::new("public_key")
+             .long("public_key")
+             .takes_value(true)
+             .help("base64 encoded public_key. Look at https://raw.githubusercontent.com/jyotsna-penumaka/rekor-rs/rekor-functionality/test_data/create_log_entry.md for more details on generating keys."))
+    .arg(Arg::new("key_format")
+             .long("key_format")
+             .takes_value(true)
+             .help("Accepted formats are : pgp / x509 / minsign / ssh / tuf"))  
+    .arg(Arg::new("signature")
+             .long("signature")
+             .takes_value(true)
+             .help("base64 encoded signature of the artifact. Look at https://raw.githubusercontent.com/jyotsna-penumaka/rekor-rs/rekor-functionality/test_data/create_log_entry.md for more details on generating keys."))
+    .arg(Arg::new("api_version")
+             .long("api_version")
+             .takes_value(true)
+             .help("Rekor-rs open api version"));
+
+    let flags = matches.get_matches();
+
+    //println!("{}", flags.value_of("api_version").unwrap_or("aaa"));
+
     let configuration = Configuration::default();
+
     let hash = Hash::new(
         AlgorithmKind::sha256,
-        "e2535d638859bb63ea9ea5cf467562cba63b007eae1acd0d73a3f259c582561f".to_string(),
+        flags
+            .value_of("hash")
+            .unwrap_or("27b46cbb8b82ea64b6c8f0ba592b891e288fd24211516a7256d769463404fe7c")
+            .to_string(),
     );
     let data = Data::new(
         hash,
         Url::parse(
-            "https://raw.githubusercontent.com/jyotsna-penumaka/integrate-rekor/main/README.md",
+            flags.value_of("url").unwrap_or("https://raw.githubusercontent.com/jyotsna-penumaka/rekor-rs/rekor-functionality/test_data/data"),
         )
         .unwrap(),
     );
     let public_key = PublicKey::new(
-        "c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSVA3M2tuT0tKYVNyVEtEa2U2OEgvRlJoODRZWU5CU0tBN1hPVWRpWmJjeG8gdGVzdEByZWtvci5kZXYK".to_string(),
+        flags.value_of("public_key").unwrap_or(
+        "c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSVA3M2tuT0tKYVNyVEtEa2U2OEgvRlJoODRZWU5CU0tBN1hPVWRpWmJjeG8gdGVzdEByZWtvci5kZXYK").to_string(),
     );
     let signature = Signature::new(
-        "ssh".to_string(),
-        "LS0tLS1CRUdJTiBTU0ggU0lHTkFUVVJFLS0tLS0KVTFOSVUwbEhBQUFBQVFBQUFETUFBQUFMYzNOb0xXVmtNalUxTVRrQUFBQWcvdmVTYzRvbHBLdE1vT1I3cndmOFZHSHpoaApnMEZJb0R0YzVSMkpsdHpHZ0FBQUFFWm1sc1pRQUFBQUFBQUFBR2MyaGhOVEV5QUFBQVV3QUFBQXR6YzJndFpXUXlOVFV4Ck9RQUFBRURCYVFtVTRXNHFCQzBaM3N6aTZuSEE4cWlBdE5QVzFkU29UTmtlMTBOKzRRTUdad0pRMXR6QTVIYk5BUkxHc3cKN0I0b2RxWWFpRVEwSzMwdEtBZEcwSAotLS0tLUVORCBTU0ggU0lHTkFUVVJFLS0tLS0K".to_string(),
+        flags.value_of("key_format").unwrap_or("ssh").to_string(),
+        flags.value_of("signature").unwrap_or(
+        "LS0tLS1CRUdJTiBTU0ggU0lHTkFUVVJFLS0tLS0KVTFOSVUwbEhBQUFBQVFBQUFETUFBQUFMYzNOb0xXVmtNalUxTVRrQUFBQWcvdmVTYzRvbHBLdE1vT1I3cndmOFZHSHpoaApnMEZJb0R0YzVSMkpsdHpHZ0FBQUFFWm1sc1pRQUFBQUFBQUFBR2MyaGhOVEV5QUFBQVV3QUFBQXR6YzJndFpXUXlOVFV4Ck9RQUFBRUJqc2pZdVhYcDliVGVtZ0xLMDk3TUZMNTlvZCtEd1NrU3NHWFQ5UUZsMDFnRVYzK2R5VmRBY3lGUWo0TmErY0cKVThtOVZhQXVhR1JZblJLUUpPNEs0QgotLS0tLUVORCBTU0ggU0lHTkFUVVJFLS0tLS0K").to_string(),
         public_key,
     );
     let spec = Spec::new(signature, data);
     let proposed_entry = ProposedEntry::Rekord {
-        api_version: "0.0.1".to_string(),
+        api_version: flags.value_of("api_version").unwrap_or("0.0.1").to_string(),
         spec: spec,
     };
 

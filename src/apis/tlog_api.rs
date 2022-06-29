@@ -72,7 +72,7 @@ pub async fn get_log_info(
 pub async fn get_log_proof(
     configuration: &configuration::Configuration,
     last_size: i32,
-    first_size: Option<i32>,
+    first_size: Option<&str>,
     tree_id: Option<&str>,
 ) -> Result<crate::models::ConsistencyProof, Error<GetLogProofError>> {
     let local_var_configuration = configuration;
