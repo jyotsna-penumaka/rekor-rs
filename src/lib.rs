@@ -23,11 +23,11 @@
 //!
 //! Should you discover any security issues, please refer to
 //! Sigstore's [security process](https://github.com/sigstore/community/blob/main/SECURITY.md).
-//! 
+//!
 //! # How to use this crate
 //! The examples folder contains code that shows users how to make API calls.  
 //! It also provides a clean interface with step-by-step instructions that other developers can copy and paste.
-//! 
+//!
 //! ```
 //! use clap::{Arg, Command};
 //! use openapi::apis::{configuration::Configuration, entries_api};
@@ -46,23 +46,23 @@
 //!             .takes_value(true)
 //!             .help("log_index of the artifact"),
 //!     );
-//! 
+//!
 //!     let flags = matches.get_matches();
 //!     let index = <i32 as FromStr>::from_str(flags.value_of("log_index").unwrap_or("1")).unwrap();
-//! 
+//!
 //!     let configuration = Configuration::default();
-//! 
+//!
 //!     let message: LogEntry = entries_api::get_log_entry_by_index(&configuration, index)
 //!         .await
 //!         .unwrap();
 //!     println!("{:#?}", message);
 //! }
 //! ```
-//! 
+//!
 //! The following comment in the code tells the user how to provide the required values to the API calls using cli flags.
-//! 
+//!
 //! In the example below, the user can retrieve different entries by inputting a different value for the log_index flag.
-//! 
+//!
 //! ```
 //!     /*
 //!     Retrieves an entry and inclusion proof from the transparency log (if it exists) by index

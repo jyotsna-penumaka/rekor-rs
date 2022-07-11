@@ -11,25 +11,25 @@ pub struct ResponseContent<T> {
 #[derive(Error, Debug)]
 pub enum Error<T> {
     #[error("error in reqwest: {source:?}")]
-    Reqwest { 
+    Reqwest {
         #[from]
-        source: reqwest::Error 
+        source: reqwest::Error,
     },
 
     #[error("error in serde: {source:?}")]
-    Serde { 
+    Serde {
         #[from]
-        source: serde_json::Error 
+        source: serde_json::Error,
     },
 
     #[error("error in IO: {source:?}")]
-    Io { 
+    Io {
         #[from]
-        source: std::io::Error 
+        source: std::io::Error,
     },
 
     #[error("error in response: status code {{error.status:?}}")]
-    ResponseError (ResponseContent<T>),
+    ResponseError(ResponseContent<T>),
 }
 
 pub fn urlencode<T: AsRef<str>>(s: T) -> String {
