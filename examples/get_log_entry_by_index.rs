@@ -14,8 +14,8 @@
 // limitations under the License.
 
 use clap::{Arg, Command};
-use openapi::apis::{configuration::Configuration, entries_api};
-use openapi::models::log_entry::LogEntry;
+use rekor::apis::{configuration::Configuration, entries_api};
+use rekor::models::log_entry::LogEntry;
 use std::str::FromStr;
 
 #[tokio::main]

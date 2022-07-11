@@ -14,7 +14,7 @@
 // limitations under the License.
 
 use clap::{Arg, Command};
-use openapi::apis::{configuration::Configuration, pubkey_api};
+use rekor::apis::{configuration::Configuration, pubkey_api};
 
 #[tokio::main]
 async fn main() {

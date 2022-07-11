@@ -14,8 +14,8 @@
 // limitations under the License.
 
 use clap::{Arg, Command};
-use openapi::apis::{configuration::Configuration, index_api};
-use openapi::models::{search_index_public_key, search_index_public_key::Format, SearchIndex};
+use rekor::apis::{configuration::Configuration, index_api};
+use rekor::models::{search_index_public_key, search_index_public_key::Format, SearchIndex};
 
 #[tokio::main]
 async fn main() {

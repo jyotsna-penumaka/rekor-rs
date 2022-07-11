@@ -13,8 +13,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use openapi::apis::{configuration::Configuration, entries_api};
-use openapi::models::{
+use rekor::apis::{configuration::Configuration, entries_api};
+use rekor::models::{
     log_entry::LogEntry,
     rekord::{AlgorithmKind, Data, Hash, PublicKey, Signature, Spec},
     ProposedEntry,

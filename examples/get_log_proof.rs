@@ -14,8 +14,8 @@
 // limitations under the License.
 
 use clap::{Arg, Command};
-use openapi::apis::{configuration::Configuration, tlog_api};
-use openapi::models::ConsistencyProof;
+use rekor::apis::{configuration::Configuration, tlog_api};
+use rekor::models::ConsistencyProof;
 use std::str::FromStr;
 
 #[tokio::main]

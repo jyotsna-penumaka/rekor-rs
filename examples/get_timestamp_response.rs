@@ -13,7 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use openapi::apis::{configuration::Configuration, timestamp_api};
+use rekor::apis::{configuration::Configuration, timestamp_api};
 use std::path::PathBuf;
 
 #[tokio::main]

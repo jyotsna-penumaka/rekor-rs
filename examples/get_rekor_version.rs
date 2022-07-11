@@ -13,7 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use openapi::apis::{configuration::Configuration, server_api};
+use rekor::apis::{configuration::Configuration, server_api};
 
 /*
 Gets the current version of the rekor server

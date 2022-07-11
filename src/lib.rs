@@ -13,7 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! This crate aims to provide Rust API client for [Rekor] (https://github.com/sigstore/rekor) to Rust developers.
+//! This crate aims to provide Rust API client for Rekor <https://github.com/sigstore/rekor> to Rust developers.
 //!
 //! Rekor is a cryptographically secure, immutable transparency log for signed software releases.
 //!
@@ -30,8 +30,8 @@
 //!
 //! ```
 //! use clap::{Arg, Command};
-//! use openapi::apis::{configuration::Configuration, entries_api};
-//! use openapi::models::log_entry::LogEntry;
+//! use rekor::apis::{configuration::Configuration, entries_api};
+//! use rekor::models::log_entry::LogEntry;
 //! use std::str::FromStr;
 //! #[tokio::main]
 //! async fn main() {
@@ -63,13 +63,13 @@
 //!
 //! In the example below, the user can retrieve different entries by inputting a different value for the log_index flag.
 //!
-//! ```
-//!     /*
-//!     Retrieves an entry and inclusion proof from the transparency log (if it exists) by index
-//!     Example command :
-//!     cargo run --example get_log_entry_by_index -- --log_index 99
-//!     */
-//! ```
+//!
+//!/*
+//!Retrieves an entry and inclusion proof from the transparency log (if it exists) by index
+//!Example command :
+//!cargo run --example get_log_entry_by_index -- --log_index 99
+//!*/
+//!
 //! # The example code is provided for the following API calls:
 //!
 //!    - create_log_entry

@@ -1,5 +1,5 @@
 [package]
-name = "rekor-rs"
+name = "rekor"
 version = "0.0.1"
 authors = ["Jyotsna Penumaka"]
 edition = "2018"

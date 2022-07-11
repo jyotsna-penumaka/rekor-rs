@@ -13,8 +13,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use openapi::apis::{configuration::Configuration, tlog_api};
-use openapi::models::LogInfo;
+use rekor::apis::{configuration::Configuration, tlog_api};
+use rekor::models::LogInfo;
 
 #[tokio::main]
 async fn main() {
