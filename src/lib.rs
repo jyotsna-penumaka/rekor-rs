@@ -72,17 +72,17 @@
 //!
 //! # The example code is provided for the following API calls:
 //!
-//!    - create_log_entry
-//!    - get_log_entry_by_index
-//!    - get_log_entry_by_uuid
-//!    - get_log_info
-//!    - get_log_proof
-//!    - get_public_key
-//!    - get_rekor_version
-//!    - get_timestamp_cert_chain
-//!    - get_timestamp_response
-//!    - search_index
-//!    - search_log_query
+//!- create_log_entry
+//!- get_log_entry_by_index
+//!- get_log_entry_by_uuid
+//!- get_log_info
+//!- get_log_proof
+//!- get_public_key
+//!- get_rekor_version
+//!- get_timestamp_cert_chain
+//!- get_timestamp_response
+//!- search_index
+//!- search_log_query
 //!
 
 #[macro_use]
