@@ -20,10 +20,12 @@ use rekor::models::log_entry::LogEntry;
 #[tokio::main]
 async fn main() {
     /*
+
     Get log entry and information required to generate an inclusion proof for the entry in the transparency log
 
     Example command :
     cargo run --example get_log_entry_by_uuid -- --uuid 073970a07c978b7a9ff15b69fe15d87dfb58fd5756086e3d1fb671c2d0bd95c0
+
     */
     let matches = Command::new("cmd").arg(
         Arg::new("uuid")

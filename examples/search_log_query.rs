@@ -16,7 +16,7 @@
 use clap::{Arg, Command};
 use rekor::apis::{configuration::Configuration, entries_api};
 use rekor::models::{
-    rekord::{AlgorithmKind, Data, Hash, PublicKey, Signature, Spec},
+    hashedrekord::{AlgorithmKind, Data, Hash, PublicKey, Signature, Spec},
     ProposedEntry, SearchLogQuery,
 };
 use std::str::FromStr;
@@ -27,7 +27,18 @@ async fn main() {
     /*
     Searches transparency log for one or more log entries.
     Returns zero or more entries from the transparency log, according to how many were included in request query.
-    */
+
+    Example command :
+    cargo run --example search_log_query -- \
+     --hash c7ead87fa5c82d2b17feece1c2ee1bda8e94788f4b208de5057b3617a42b7413\
+     --url https://raw.githubusercontent.com/jyotsna-penumaka/rekor-rs/rekor-functionality/test_data/data\
+     --public_key LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUZrd0V3WUhLb1pJemowQ0FRWUlLb1pJemowREFRY0RRZ0FFeEhUTWRSQk80ZThCcGZ3cG5KMlozT2JMRlVrVQpaUVp6WGxtKzdyd1lZKzhSMUZpRWhmS0JZclZraGpHL2lCUjZac2s3Z01iYWZPOG9FM01lUEVvWU93PT0KLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tCg==\
+     --signature MEUCIHWACbBnw+YkJCy2tVQd5i7VH6HgkdVBdP7HRV1IEsDuAiEA19iJNvmkE6We7iZGjHsTkjXV8QhK9iXu0ArUxvJF1N8=\
+     --key_format x509\
+     --api_version 0.0.1\
+     --entry_uuids 1377da9d9dbad451a5a8acdd28add750815d34e8205f1b8a35a67b8a27dae9bf\
+     --log_indexes 2922253
+     */
 
     let matches = Command::new("cmd")
     .arg(Arg::new("hash")
@@ -69,7 +80,7 @@ async fn main() {
         AlgorithmKind::sha256,
         flags
             .value_of("hash")
-            .unwrap_or("27fcf3e4e65e840060efacd20e272917b9571a29eed63e402fd5e1bfb3ba715d")
+            .unwrap_or("c7ead87fa5c82d2b17feece1c2ee1bda8e94788f4b208de5057b3617a42b7413")
             .to_string(),
     );
     let data = Data::new(
@@ -81,16 +92,16 @@ async fn main() {
     );
     let public_key = PublicKey::new(
         flags.value_of("public_key").unwrap_or(
-        "c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSVA3M2tuT0tKYVNyVEtEa2U2OEgvRlJoODRZWU5CU0tBN1hPVWRpWmJjeG8gdGVzdEByZWtvci5kZXYK").to_string(),
+        "LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUZrd0V3WUhLb1pJemowQ0FRWUlLb1pJemowREFRY0RRZ0FFeEhUTWRSQk80ZThCcGZ3cG5KMlozT2JMRlVrVQpaUVp6WGxtKzdyd1lZKzhSMUZpRWhmS0JZclZraGpHL2lCUjZac2s3Z01iYWZPOG9FM01lUEVvWU93PT0KLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tCg==").to_string(),
     );
     let signature = Signature::new(
-        flags.value_of("public_key").unwrap_or("ssh").to_string(),
+        flags.value_of("public_key").unwrap_or("x509").to_string(),
         flags.value_of("signature").unwrap_or(
-        "LS0tLS1CRUdJTiBTU0ggU0lHTkFUVVJFLS0tLS0KVTFOSVUwbEhBQUFBQVFBQUFETUFBQUFMYzNOb0xXVmtNalUxTVRrQUFBQWcvdmVTYzRvbHBLdE1vT1I3cndmOFZHSHpoaApnMEZJb0R0YzVSMkpsdHpHZ0FBQUFFWm1sc1pRQUFBQUFBQUFBR2MyaGhOVEV5QUFBQVV3QUFBQXR6YzJndFpXUXlOVFV4Ck9RQUFBRURCYVFtVTRXNHFCQzBaM3N6aTZuSEE4cWlBdE5QVzFkU29UTmtlMTBOKzRRTUdad0pRMXR6QTVIYk5BUkxHc3cKN0I0b2RxWWFpRVEwSzMwdEtBZEcwSAotLS0tLUVORCBTU0ggU0lHTkFUVVJFLS0tLS0K").to_string(),
+        "MEUCIHWACbBnw+YkJCy2tVQd5i7VH6HgkdVBdP7HRV1IEsDuAiEA19iJNvmkE6We7iZGjHsTkjXV8QhK9iXu0ArUxvJF1N8=").to_string(),
         public_key,
     );
     let spec = Spec::new(signature, data);
-    let proposed_entry = ProposedEntry::Rekord {
+    let proposed_entry = ProposedEntry::Hashedrekord {
         api_version: flags.value_of("api_version").unwrap_or("0.0.1").to_string(),
         spec: spec,
     };
@@ -98,10 +109,10 @@ async fn main() {
     let query = SearchLogQuery {
         entry_uuids: Some(vec![flags
             .value_of("entry_uuids")
-            .unwrap_or("3bb6b37275642a289650d81cd5ba8aba0adcf9b5a5330d21bf9dd6157f4cbb67")
+            .unwrap_or("1377da9d9dbad451a5a8acdd28add750815d34e8205f1b8a35a67b8a27dae9bf")
             .to_string()]),
         log_indexes: Some(vec![<i32 as FromStr>::from_str(
-            flags.value_of("log_indexes").unwrap_or("1594206"),
+            flags.value_of("log_indexes").unwrap_or("2922253"),
         )
         .unwrap()]),
         entries: Some(vec![proposed_entry]),

@@ -20,6 +20,7 @@ use rekor::apis::{configuration::Configuration, pubkey_api};
 async fn main() {
     /*
     Returns the public key that can be used to validate the signed tree head
+
     Example command :
     cargo run --example get_public_key
     */

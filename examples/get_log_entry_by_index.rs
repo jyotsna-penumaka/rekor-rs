@@ -21,9 +21,12 @@ use std::str::FromStr;
 #[tokio::main]
 async fn main() {
     /*
+
     Retrieves an entry and inclusion proof from the transparency log (if it exists) by index
+
     Example command :
     cargo run --example get_log_entry_by_index -- --log_index 99
+
     */
     let matches = Command::new("cmd").arg(
         Arg::new("log_index")

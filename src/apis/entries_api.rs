@@ -51,7 +51,7 @@ pub enum SearchLogQueryError {
     UnknownValue(serde_json::Value),
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LogEntries {
     entries: Vec<LogEntry>,

@@ -16,6 +16,18 @@
 use rekor::apis::{configuration::Configuration, timestamp_api};
 use std::path::PathBuf;
 
+/*
+
+Returns a timestamp response and the location of the log entry in the transprency log
+
+Example command :
+cargo run --example get_timestamp_response
+
+timestamping authority has been removed from rekor.
+So this test will fail.
+https://github.com/sigstore/rekor/pull/813
+*/
+
 #[tokio::main]
 async fn main() {
     let configuration = Configuration::default();

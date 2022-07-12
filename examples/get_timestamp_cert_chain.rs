@@ -15,6 +15,18 @@
 
 use rekor::apis::{configuration::Configuration, timestamp_api};
 
+/*
+
+Generates a new timestamp response and creates a new log entry for the timestamp in the transparency log
+
+Example command :
+cargo run --example get_timestamp_cert_chain
+
+timestamping authority has been removed from rekor.
+So this test will fail.
+https://github.com/sigstore/rekor/pull/813
+*/
+
 #[tokio::main]
 async fn main() {
     let configuration = Configuration::default();

@@ -21,11 +21,14 @@ use std::str::FromStr;
 #[tokio::main]
 async fn main() {
     /*
+
     Get information required to generate a consistency proof for the transparency log.
     Returns a list of hashes for specified tree sizes that can be used to confirm the consistency of the transparency log.
+
     Example command :
     cargo run --example get_log_proof -- --last_size 10
     cargo run --example get_log_proof -- --last_size 10 --first_size 1
+
     */
     let matches = Command::new("cmd")
     .arg(Arg::new("last_size")

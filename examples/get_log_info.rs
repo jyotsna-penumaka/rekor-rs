@@ -19,8 +19,16 @@ use rekor::models::LogInfo;
 #[tokio::main]
 async fn main() {
     /*
-    Get information about the current state of the transparency log.
+
+    Gets information about the current state of the transparency log.
     Returns the current root hash and size of the merkle tree used to store the log entries.
+
+    Example command :
+    cargo run --example get_log_info
+
+    The server might return an error sometimes,
+    this is because the result depends on the kind of rekor object that gets returned.
+
     */
     let configuration = Configuration::default();
     let log_info: LogInfo = tlog_api::get_log_info(&configuration).await.unwrap();

@@ -20,12 +20,20 @@ use rekor::models::{search_index_public_key, search_index_public_key::Format, Se
 #[tokio::main]
 async fn main() {
     /*
+
+    Searches index by entry metadata
+
     Example command:
     cargo run --example search_index -- \
     --hash e2535d638859bb63ea9ea5cf467562cba63b007eae1acd0d73a3f259c582561f \
     --public_key c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSVA3M2tuT0tKYVNyVEtEa2U2OEgvRlJoODRZWU5CU0tBN1hPVWRpWmJjeG8gdGVzdEByZWtvci5kZXYK \
     --key_format ssh \
     --email jpenumak@redhat.com
+
+
+    The server might return an error sometimes,
+    this is because the result depends on the kind of rekor object that gets returned.
+
     */
 
     let matches = Command::new("cmd")

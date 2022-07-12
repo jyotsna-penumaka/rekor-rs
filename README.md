@@ -24,7 +24,6 @@ A lot of changes have been made to the auto-generated API inorder to make it con
 cargo doc --open
 ```
 
-#### Known limitations
+## Known limitations
 * need to change the docs link in the readme once the crate gets published
-* The example code for the API call get_log_info might return an error in some circumstances, depending on the rekor object. 
-* The example code for create_log_entry and search_log_query needs to debugged.
+* The example code for the API call `get_log_info` might return an error in some circumstances, depending on the rekor object. 
