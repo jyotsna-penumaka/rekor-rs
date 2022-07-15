@@ -88,29 +88,32 @@ async fn main() {
 
     let hash = Hash::new(
         AlgorithmKind::sha256,
-        flags
-            .value_of("hash")
-            .unwrap_or(HASH)
-            .to_string(),
+        flags.value_of("hash").unwrap_or(HASH).to_string(),
     );
     let data = Data::new(
         hash,
-        Url::parse(
-            flags.value_of("url").unwrap_or(URL),
-        )
-        .unwrap(),
+        Url::parse(flags.value_of("url").unwrap_or(URL)).unwrap(),
     );
     let public_key = PublicKey::new(
-        flags.value_of("public_key").unwrap_or(PUBLIC_KEY).to_string(),
+        flags
+            .value_of("public_key")
+            .unwrap_or(PUBLIC_KEY)
+            .to_string(),
     );
     let signature = Signature::new(
-        flags.value_of("key_format").unwrap_or(KEY_FORMAT).to_string(),
+        flags
+            .value_of("key_format")
+            .unwrap_or(KEY_FORMAT)
+            .to_string(),
         flags.value_of("signature").unwrap_or(SIGNATURE).to_string(),
         public_key,
     );
     let spec = Spec::new(signature, data);
     let proposed_entry = ProposedEntry::Hashedrekord {
-        api_version: flags.value_of("api_version").unwrap_or(API_VERSION).to_string(),
+        api_version: flags
+            .value_of("api_version")
+            .unwrap_or(API_VERSION)
+            .to_string(),
         spec: spec,
     };
 

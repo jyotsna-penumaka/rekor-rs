@@ -80,7 +80,12 @@ async fn main() {
 
     let public_key = search_index_public_key::SearchIndexPublicKey {
         format: key_format,
-        content: Some(flags.value_of("public_key").unwrap_or(PUBLIC_KEY).to_string()),
+        content: Some(
+            flags
+                .value_of("public_key")
+                .unwrap_or(PUBLIC_KEY)
+                .to_string(),
+        ),
         url: None,
     };
 
