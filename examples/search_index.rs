@@ -30,6 +30,10 @@ async fn main() {
     --key_format ssh \
     --email jpenumak@redhat.com
 
+    cargo run --example search_index -- \
+    --public_key c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSVA3M2tuT0tKYVNyVEtEa2U2OEgvRlJoODRZWU5CU0tBN1hPVWRpWmJjeG8gdGVzdEByZWtvci5kZXYK \
+    --key_format ssh \
+    --email jpenumak@redhat.com
 
     The server might return an error sometimes,
     this is because the result depends on the kind of rekor object that gets returned.
@@ -60,7 +64,13 @@ async fn main() {
 
     let flags = matches.get_matches();
 
-    let key_format = match flags.value_of("key_format").unwrap() {
+    // The following default values will be used if the user does not input values using cli flags
+    const HASH: &str = "c7ead87fa5c82d2b17feece1c2ee1bda8e94788f4b208de5057b3617a42b7413";
+    const PUBLIC_KEY: &str = "LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUZrd0V3WUhLb1pJemowQ0FRWUlLb1pJemowREFRY0RRZ0FFeEhUTWRSQk80ZThCcGZ3cG5KMlozT2JMRlVrVQpaUVp6WGxtKzdyd1lZKzhSMUZpRWhmS0JZclZraGpHL2lCUjZac2s3Z01iYWZPOG9FM01lUEVvWU93PT0KLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tCg==";
+    const KEY_FORMAT: &str = "x509";
+    const EMAIL: &str = "jpenumak@redhat.com";
+
+    let key_format = match flags.value_of("key_format").unwrap_or(KEY_FORMAT) {
         "pgp" => Format::Pgp,
         "x509" => Format::X509,
         "minisign" => Format::Minisign,
@@ -70,14 +80,14 @@ async fn main() {
 
     let public_key = search_index_public_key::SearchIndexPublicKey {
         format: key_format,
-        content: Some(flags.value_of("public_key").unwrap().to_string()),
+        content: Some(flags.value_of("public_key").unwrap_or(PUBLIC_KEY).to_string()),
         url: None,
     };
 
     let query = SearchIndex {
-        email: Some(flags.value_of("email").unwrap().to_string()),
+        email: Some(flags.value_of("email").unwrap_or(EMAIL).to_string()),
         public_key: Some(Box::new(public_key)),
-        hash: Some(flags.value_of("hash").unwrap().to_string()),
+        hash: Some(flags.value_of("hash").unwrap_or(HASH).to_string()),
     };
     let configuration = Configuration::default();
 

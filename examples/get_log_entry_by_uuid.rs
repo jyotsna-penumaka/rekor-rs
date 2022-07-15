@@ -34,10 +34,13 @@ async fn main() {
             .help("uuid of the artifact"),
     );
 
+    // The following default value will be used if the user does not input values using cli flags
+    const UUID: &str = "073970a07c978b7a9ff15b69fe15d87dfb58fd5756086e3d1fb671c2d0bd95c0";
+
     let flags = matches.get_matches();
     let uuid = flags
         .value_of("uuid")
-        .unwrap_or("073970a07c978b7a9ff15b69fe15d87dfb58fd5756086e3d1fb671c2d0bd95c0")
+        .unwrap_or(UUID)
         .to_string();
     let configuration = Configuration::default();
     let message: LogEntry = entries_api::get_log_entry_by_uuid(&configuration, &uuid)

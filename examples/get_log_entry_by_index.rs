@@ -35,8 +35,11 @@ async fn main() {
             .help("log_index of the artifact"),
     );
 
+    // The following default value will be used if the user does not input values using cli flags
+    const LOG_INDEX: &str = "1";
+
     let flags = matches.get_matches();
-    let index = <i32 as FromStr>::from_str(flags.value_of("log_index").unwrap_or("1")).unwrap();
+    let index = <i32 as FromStr>::from_str(flags.value_of("log_index").unwrap_or(LOG_INDEX)).unwrap();
 
     let configuration = Configuration::default();
 

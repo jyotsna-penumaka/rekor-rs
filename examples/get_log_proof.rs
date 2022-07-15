@@ -47,9 +47,12 @@ async fn main() {
     let configuration = Configuration::default();
     let flags = matches.get_matches();
 
+    // The following default value will be used if the user does not input values using cli flags
+    const LAST_SIZE: &str = "10";
+
     let log_proof: ConsistencyProof = tlog_api::get_log_proof(
         &configuration,
-        <i32 as FromStr>::from_str(flags.value_of("last_size").unwrap_or("10")).unwrap(),
+        <i32 as FromStr>::from_str(flags.value_of("last_size").unwrap_or(LAST_SIZE)).unwrap(),
         flags.value_of("first_size"),
         flags.value_of("tree_id"),
     )
