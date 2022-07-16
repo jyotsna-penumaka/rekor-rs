@@ -1,8 +1,13 @@
 [package]
 name = "rekor"
+description = "An experimental crate to interact with rekor"
 version = "0.0.1"
-authors = ["Jyotsna Penumaka"]
 edition = "2018"
+authors =  [
+  "rekor-rs developers",
+]
+license = "Apache-2.0"
+readme = "README.md"
 
 [dependencies]
 serde = "^1.0"
