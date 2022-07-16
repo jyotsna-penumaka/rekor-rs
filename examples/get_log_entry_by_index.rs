@@ -39,8 +39,7 @@ async fn main() {
     const LOG_INDEX: &str = "1";
 
     let flags = matches.get_matches();
-    let index =
-        <i32 as FromStr>::from_str(flags.value_of("log_index").unwrap_or(LOG_INDEX)).unwrap();
+    let index = i32::from_str(flags.value_of("log_index").unwrap_or(LOG_INDEX)).unwrap();
 
     let configuration = Configuration::default();
 

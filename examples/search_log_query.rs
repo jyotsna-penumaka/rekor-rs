@@ -122,7 +122,7 @@ async fn main() {
             .value_of("entry_uuids")
             .unwrap_or(ENTRY_UUIDS)
             .to_string()]),
-        log_indexes: Some(vec![<i32 as FromStr>::from_str(
+        log_indexes: Some(vec![i32::from_str(
             flags.value_of("log_indexes").unwrap_or(LOG_INDEXES),
         )
         .unwrap()]),

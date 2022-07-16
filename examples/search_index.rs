@@ -91,7 +91,7 @@ async fn main() {
 
     let query = SearchIndex {
         email: Some(flags.value_of("email").unwrap_or(EMAIL).to_string()),
-        public_key: Some(Box::new(public_key)),
+        public_key: Some(public_key),
         hash: Some(flags.value_of("hash").unwrap_or(HASH).to_string()),
     };
     let configuration = Configuration::default();
